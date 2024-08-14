@@ -1,4 +1,8 @@
 #!/usr/bin/env perl
+#
+# Copyright The Mbed TLS Contributors
+# SPDX-License-Identifier: Apache-2.0
+
 use strict;
 use warnings;
 

@@ -2,13 +2,13 @@
   @verbatim
   ******************************************************************************
   *
-  *         Portions COPYRIGHT 2016-2023 STMicroelectronics, All Rights Reserved
-  *         Copyright (C) 2006-2018, ARM Limited, All Rights Reserved
+  * Portions Copyright (C) 2016-2023 STMicroelectronics, All Rights Reserved
+  * Copyright (C) 2006-2023, ARM Limited, All Rights Reserved
   *
   * @file    st_readme.txt
   * @author  MCD Application Team
   * @brief   This file lists the main modification done by STMicroelectronics on
-  *          mbedTLS for integration with STM32Cube solution.
+  *          mbed-crypto for integration with STM32Cube solution.
   ******************************************************************************
   *
   * original licensing conditions
@@ -16,114 +16,102 @@
   *
   ******************************************************************************
   @endverbatim
-### 24-October-2023 ###
-   + Align function prototype and implementation :
-    - ssl_calc_verify_tls
-    - ssl_calc_verify_tls_sha256
-    - ssl_calc_verify_tls_sha384
-   + Increase padbuf size in ssl_calc_finished_tls_sha384 for sha512 use
 
-### 24-July-2023 ###
-   +Improve mbedtls_hardware_poll :
-    - Set return error value to mbedtls error value.
-    - Replace memset function by loop function to avoid data corruption during memory copy.
-
-   + Use variable ret in mbedtls_pk_parse_key function to avoid IAR warning.
-
-### 25-August-2020 ###
+### 07-February-2023 ###
 ========================
-   + Update GCM templates with Additional data not 4 bytes aligned
-   (default configuration enabled by define : STM32_AAD_ANY_LENGTH_SUPPORT)
+    + Move to Mbed-TLS V2.28.7
+    + Removed dual license, STMicroelectronics provides the Mbed-TLS middleware
+	  under only the Apache-2.0 license.
+    + Fixed IAR Warning[Pe546]: transfer of control bypasses initialization
+      variable : padding
+    + Update st_readme.txt
 
-### 02-April-2020 ###
+
+### 08-December-2023 ###
 ========================
-   + Add in template directory the files :
-    - Update aes_alt_template.[c/h]
-    - gcm_alt_template.[c/h] : mbed TLS GCM Hw crypto using HAL/CRYP API
-    - ccm_alt_template.[c/h] : mbed TLS CCM Hw crypto using HAL/CRYP API
-    - cryp_stm32.[c/h] : ST file with commom procedures on crypto processor
+    + Add ST Copyright
+    + Update st_readme.txt
+    + Add support when using STM32 Secure Element.
+    + Add support when using STM32 HUK.
+    + Add double signature check, with single signature computation.
+    + Fix inclusion path : replaced "psa/crypto.h" by "crypto.h" when building
+      TFM project.
+    + Fix warning : enumerated type mixed with another type (mbedtls_md_type_t).
+    + Execlude macro when building project for TFM to avoid Warning[Pa181]:
+      incompatible redefinition of macros : "PSA_KEY_EXPORT_MAX_SIZE",
+      “PSA_MAX_BLOCK_CIPHER_BLOCK_SIZE”, “PSA_HASH_SIZE”,  “PSA_MAC_FINAL_SIZE”
+      & “PSA_ALG_TLS12_PSK_TO_MS_MAX_PSK_LEN”.
 
-    - sha1_alt_template.[c/h] : mbed TLS Sha1 Hw crypto using HAL/CRYP API
-    - sha256_alt_template.[c/h] : mbed TLS Sha256 Hw crypto using HAL/CRYP API
-    - md5_alt_template.[c/h] : mbed TLS MD5 Hw crypto using HAL/CRYP API
-    - hash_stm32.[c/h] : ST file with commom procedures on hash processor
-
-   + Fix GCM selftest by skipping tests with IV out of the values supported by HW.
-   Hw implementation limit IV to a length of 96-bits.
-   It is the value recommended for situations in which efficiency is critical.
-
-### 17-Jan-2020 ###
+### 27-November-2023 ###
 ========================
-   + Add in template directory the files :
-     - aes_alt_template.[c/h] : mbed TLS AES Hw crypto using HAL/CRYP API
+    + Add LICENSE.txt
+    + update st_readme.txt
+    + psa_crypto_aead.c & pas_crypto_driver_wrappers.c :
+      add MBEDTLS_PSA_BUILTIN_AEAD flag to avoid Keil Error: L6218E: Undefined
+      symbol.
+    + psa_crypto.c : Add AT_LEAST_ONE_BUILTIN_KDF flag to avoid IAR
+      Warning[Pe111].
+    + pkcs5.c : moved padding variable declaration to the begining of
+      mbedtls_pkcs5_pbes2_ext to avoid IAR warning.
+    + gcm.c & nist_kw.c : improved Mbed TLS Self-test to skip AES-192 key size
+      test when the alternative implementation does not support it.
+    + crypto_spe.h : add function definition to avoid duplication of symbols
+      between TF-M and Mbed Crypto.
 
-### 10-Dec-2019 ###
+### 15-November-2023 ###
 ========================
-   + Upgrade to use mbedTLS V2.16.2
+    Move to Mbed-TLS v2.28.5
 
-
-### 21-Dec-2018 ###
+### 17-August-2023 ###
 ========================
-   + Upgrade to use mbedTLS V2.14.1
+    Move to Mbed-TLS v2.28.4
 
-   + Fix Keil compiler warning
-
-   + Update timing_alt_template.c : Protect the mbedtls alternate timing APIs with the flag MBEDTLS_TIMING_ALT
-
-### 06-July-2018 ###
+### 25-May-2023 ###
 ========================
-   + Upgrade to use mbedTLS V2.11.0
+    Move to Mbed-TLS v2.28.3
 
-   + Re-apply the fix for EWARM warnings due to invalid code for 32 bit machines 
-     (still not integrated  see https://github.com/ARMmbed/mbedtls/issues/683)
-
-   + add template directory containing the files:
-     - net_socket_template.c        : mbedtls networking routines implemented using LwIP API
-     - rng_alt_template.c           : mbedtls RNG routing using the HAL_RNG API
-     - threading_alt_template.[c/h] : mbedtls mutex management template implementation 
-                                      using the CMSIS-RTOS v1/v2 API
-     - timing_alt.[c/h]             : mbedTLS alternate timing API based on
-                                      CMSIS-RTOS v1/v2 API
-
-
-### 10-November-2017 ###
+### 13-May-2022 ###
 ========================
-   + Upgrade to use mbedTLS V2.6.1
-   + fix missing prototype error,in the library/aes.c file, with EWARM toolchain when MBEDTLS_DEPRECATED_REMOVED is defined.
+    + backport mbedtls-2.28.0
+	++ alignment with TFM v1.3.0
+	+++ remove unsupported functions : psa_mac_compute, psa_mac_verify, psa_cipher_encrypt, psa_cipher_decrypt
+	+++ fix double inclusion path porting on crypto.h
+	+++ use deprecating define PSA_KEY_USAGE_SIGN_HASH (instead of PSA_KEY_USAGE_SIGN_MESSAGE)
+	+++ use deprecating define PSA_KEY_USAGE_VERIFY_HASH, (instead of PSA_KEY_USAGE_VERIFY_MESSAGE,)
+	+++ Allow creating a read-only key (for secure element)
 
+	++ miscellaneous warnings
 
-### 09-October-2017 ###
+	++ backport customizations
+	+++ HUK support for STM32U5, under switch USE_HUK
+	+++ double signature check
+	+++ using of vendor keys for secure element)
+
+### 18-May-2021 ###
 ========================
-   + Upgrade to use mbedTLS V2.6.0
-   + Update the "net_socket_template.c" file to use LwIP API, this make it directly usable in the applications
-   + Fix compiler warnings by including newer patches from the mbedTLS git tree
+    + Add LICENSE.txt
 
-
-### 23-December-2016 ###
+### 12-June-2020 ###
 ========================
-   + Upgrade to use mbedTLS V2.4.0
-   + Rename the "net_sockets.c" to "net_sockets_template.c" to provide the net_sockets.c actual implementation in user projects.
-   + Fix warnings due to invalid code for 32 bit machines, see https://github.com/ARMmbed/mbedtls/issues/683
+    + pkparse.c fix warning when MBEDTLS_PEM_PARSE_C, MBEDTLS_PKCS12_C & MBEDTLS_PKCS5_C are not defined
 
-
-### 27-March-2015 ###
-=====================
-   + Add support of the hardware Cryptographic and Hash processors embedded in STM32F756xx devices.
-     This support is activated by defining "USE_STM32F7XX_HW_CRYPTO" macro in PolarSSL config.h file.
-   + Fix some compilation warnings 
-
-
-### 13-March-2015 ###
-=====================
-   + Align to latest version of STM32Cube CRYP HAL driver: add initialization of Crypto handler's Instance field
-
-
-### 18-February-2014 ###
+### 8-June-2020 ###
 ========================
-   + PolarSSL V1.2.8 customized version for STM32Cube solution.
-   + Source files modified to support the hardware Cryptographic and Hash processors embedded in
-     STM32F415xx/417xx/437xx/439xx devices. This support is activated by defining
-     "USE_STM32F4XX_HW_CRYPTO" macro in PolarSSL config.h file.
+    + Update this file.
 
- * <h3><center>&copy; COPYRIGHT STMicroelectronics</center></h3>
- */
+### 1-June-2020 ###
+========================
+    + Fix switch MCUBOOT_DOUBLE_SIGN_VERIF name.
+
+### 14-May-2020 ###
+========================
+    + Introduce switch to allow double signature check with single signature
+      computation.
+
+### 07-November-2019 ###
+========================
+    use  mbedcrypto-1.1.0
+
+### 28-June-2019 ###
+========================
+    use  mbedcrypto-1.0.0

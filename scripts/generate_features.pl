@@ -1,5 +1,7 @@
 #!/usr/bin/env perl
 #
+# Copyright The Mbed TLS Contributors
+# SPDX-License-Identifier: Apache-2.0
 
 use strict;
 
@@ -25,8 +27,8 @@ if( @ARGV ) {
 
 my $feature_format_file = $data_dir.'/version_features.fmt';
 
-my @sections = ( "System support", "mbed TLS modules",
-                 "mbed TLS feature support" );
+my @sections = ( "System support", "Mbed TLS modules",
+                 "Mbed TLS feature support" );
 
 my $line_separator = $/;
 undef $/;

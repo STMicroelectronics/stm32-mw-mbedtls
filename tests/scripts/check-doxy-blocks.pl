@@ -7,6 +7,9 @@
 #   sed -e '/EXTRACT/s/YES/NO/' doxygen/mbedtls.doxyfile | doxygen -
 # but that would warn about any undocumented item, while our goal is to find
 # items that are documented, but not marked as such by mistake.
+#
+# Copyright The Mbed TLS Contributors
+# SPDX-License-Identifier: Apache-2.0
 
 use warnings;
 use strict;
@@ -53,7 +56,7 @@ sub check_dir {
 # Check that the script is being run from the project's root directory.
 for my $dir (@directories) {
     if (! -d $dir) {
-        die "This script must be run from the mbed TLS root directory";
+        die "This script must be run from the Mbed TLS root directory";
     } else {
         check_dir($dir)
     }

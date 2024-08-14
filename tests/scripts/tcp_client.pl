@@ -4,6 +4,9 @@
 # Usage: tcp_client.pl HOSTNAME PORT DATA1 RESPONSE1
 #   DATA: hex-encoded data to send to the server
 #   RESPONSE: regexp that must match the server's response
+#
+# Copyright The Mbed TLS Contributors
+# SPDX-License-Identifier: Apache-2.0
 
 use warnings;
 use strict;
