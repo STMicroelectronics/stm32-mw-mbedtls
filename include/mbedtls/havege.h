@@ -24,12 +24,6 @@
 #ifndef MBEDTLS_HAVEGE_H
 #define MBEDTLS_HAVEGE_H
 
-#if !defined(MBEDTLS_CONFIG_FILE)
-#include "config.h"
-#else
-#include MBEDTLS_CONFIG_FILE
-#endif
-
 #include <stddef.h>
 
 #define MBEDTLS_HAVEGE_COLLECT_SIZE 1024

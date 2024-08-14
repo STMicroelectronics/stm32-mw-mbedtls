@@ -37,12 +37,6 @@
 #ifndef MBEDTLS_NIST_KW_H
 #define MBEDTLS_NIST_KW_H
 
-#if !defined(MBEDTLS_CONFIG_FILE)
-#include "config.h"
-#else
-#include MBEDTLS_CONFIG_FILE
-#endif
-
 #include "cipher.h"
 
 #ifdef __cplusplus

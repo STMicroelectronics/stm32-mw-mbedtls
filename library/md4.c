@@ -137,21 +137,15 @@ int mbedtls_internal_md4_process( mbedtls_md4_context *ctx,
     GET_UINT32_LE( X[14], data, 56 );
     GET_UINT32_LE( X[15], data, 60 );
 
-#define S(x,n) (((x) << (n)) | (((x) & 0xFFFFFFFF) >> (32 - (n))))
+#define S(x,n) ((x << n) | ((x & 0xFFFFFFFF) >> (32 - n)))
 
     A = ctx->state[0];
     B = ctx->state[1];
     C = ctx->state[2];
     D = ctx->state[3];
 
-#define F(x, y, z) (((x) & (y)) | ((~(x)) & (z)))
-#define P(a,b,c,d,x,s)                           \
-    do                                           \
-    {                                            \
-        (a) += F((b),(c),(d)) + (x);             \
-        (a) = S((a),(s));                        \
-    } while( 0 )
-
+#define F(x, y, z) ((x & y) | ((~x) & z))
+#define P(a,b,c,d,x,s) { a += F(b,c,d) + x; a = S(a,s); }
 
     P( A, B, C, D, X[ 0],  3 );
     P( D, A, B, C, X[ 1],  7 );
@@ -173,13 +167,8 @@ int mbedtls_internal_md4_process( mbedtls_md4_context *ctx,
 #undef P
 #undef F
 
-#define F(x,y,z) (((x) & (y)) | ((x) & (z)) | ((y) & (z)))
-#define P(a,b,c,d,x,s)                          \
-    do                                          \
-    {                                           \
-        (a) += F((b),(c),(d)) + (x) + 0x5A827999;       \
-        (a) = S((a),(s));                               \
-    } while( 0 )
+#define F(x,y,z) ((x & y) | (x & z) | (y & z))
+#define P(a,b,c,d,x,s) { a += F(b,c,d) + x + 0x5A827999; a = S(a,s); }
 
     P( A, B, C, D, X[ 0],  3 );
     P( D, A, B, C, X[ 4],  5 );
@@ -201,13 +190,8 @@ int mbedtls_internal_md4_process( mbedtls_md4_context *ctx,
 #undef P
 #undef F
 
-#define F(x,y,z) ((x) ^ (y) ^ (z))
-#define P(a,b,c,d,x,s)                                  \
-    do                                                  \
-    {                                                   \
-        (a) += F((b),(c),(d)) + (x) + 0x6ED9EBA1;       \
-        (a) = S((a),(s));                               \
-    } while( 0 )
+#define F(x,y,z) (x ^ y ^ z)
+#define P(a,b,c,d,x,s) { a += F(b,c,d) + x + 0x6ED9EBA1; a = S(a,s); }
 
     P( A, B, C, D, X[ 0],  3 );
     P( D, A, B, C, X[ 8],  9 );

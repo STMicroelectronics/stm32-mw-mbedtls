@@ -24,12 +24,15 @@ understanding the script it is important to understand the
 framework. This doc string contains a summary of the framework
 and explains the function of this script.
 
-Mbed Crypto test suites:
-========================
+Mbed TLS test suites:
+=====================
 Scope:
 ------
-The test suites focus on unit testing the crypto primitives. Tests can be added
-to test any Mbed Crypto module.
+The test suites focus on unit testing the crypto primitives and also
+include x509 parser tests. Tests can be added to test any Mbed TLS
+module. However, the framework is not capable of testing SSL
+protocol, since that requires full stack execution and that is best
+tested as part of the system test.
 
 Test case definition:
 ---------------------
@@ -181,13 +184,7 @@ BEGIN_CASE_REGEX = r'/\*\s*BEGIN_CASE\s*(?P<depends_on>.*?)\s*\*/'
 END_CASE_REGEX = r'/\*\s*END_CASE\s*\*/'
 
 DEPENDENCY_REGEX = r'depends_on:(?P<dependencies>.*)'
-C_IDENTIFIER_REGEX = r'!?[a-z_][a-z0-9_]*'
-CONDITION_OPERATOR_REGEX = r'[!=]=|[<>]=?'
-# forbid 0ddd which might be accidentally octal or accidentally decimal
-CONDITION_VALUE_REGEX = r'[-+]?(0x[0-9a-f]+|0|[1-9][0-9]*)'
-CONDITION_REGEX = r'({})(?:\s*({})\s*({}))?$'.format(C_IDENTIFIER_REGEX,
-                                                     CONDITION_OPERATOR_REGEX,
-                                                     CONDITION_VALUE_REGEX)
+C_IDENTIFIER_REGEX = r'!?[a-z_][a-z0-9_]*$'
 TEST_FUNCTION_VALIDATION_REGEX = r'\s*void\s+(?P<func_name>\w+)\s*\('
 INT_CHECK_REGEX = r'int\s+.*'
 CHAR_CHECK_REGEX = r'char\s*\*\s*.*'
@@ -235,7 +232,7 @@ class FileWrapper(io.FileIO, object):
         if hasattr(parent, '__next__'):
             line = parent.__next__()  # Python 3
         else:
-            line = parent.next()  # Python 2 # pylint: disable=no-member
+            line = parent.next()  # Python 2
         if line is not None:
             self._line_no += 1
             # Convert byte array to string with correct encoding and
@@ -386,7 +383,7 @@ def validate_dependency(dependency):
     :return: input dependency stripped of leading & trailing white spaces.
     """
     dependency = dependency.strip()
-    if not re.match(CONDITION_REGEX, dependency, re.I):
+    if not re.match(C_IDENTIFIER_REGEX, dependency, re.I):
         raise GeneratorInputError('Invalid dependency %s' % dependency)
     return dependency
 
@@ -736,27 +733,16 @@ def gen_dep_check(dep_id, dep):
     _not, dep = ('!', dep[1:]) if dep[0] == '!' else ('', dep)
     if not dep:
         raise GeneratorInputError("Dependency should not be an empty string.")
-
-    dependency = re.match(CONDITION_REGEX, dep, re.I)
-    if not dependency:
-        raise GeneratorInputError('Invalid dependency %s' % dep)
-
-    _defined = '' if dependency.group(2) else 'defined'
-    _cond = dependency.group(2) if dependency.group(2) else ''
-    _value = dependency.group(3) if dependency.group(3) else ''
-
     dep_check = '''
         case {id}:
             {{
-#if {_not}{_defined}({macro}{_cond}{_value})
+#if {_not}defined({macro})
                 ret = DEPENDENCY_SUPPORTED;
 #else
                 ret = DEPENDENCY_NOT_SUPPORTED;
 #endif
             }}
-            break;'''.format(_not=_not, _defined=_defined,
-                             macro=dependency.group(1), id=dep_id,
-                             _cond=_cond, _value=_value)
+            break;'''.format(_not=_not, macro=dep, id=dep_id)
     return dep_check
 
 

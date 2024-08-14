@@ -35,7 +35,6 @@
 #endif
 
 #include "mbedtls/platform_util.h"
-#include "mbedtls/platform.h"
 #include "mbedtls/threading.h"
 
 #include <stddef.h>

@@ -45,10 +45,6 @@
 #include "ecdsa.h"
 #endif
 
-#if defined(MBEDTLS_USE_PSA_CRYPTO)
-#include "psa/crypto.h"
-#endif
-
 #if ( defined(__ARMCC_VERSION) || defined(_MSC_VER) ) && \
     !defined(inline) && !defined(__cplusplus)
 #define inline __inline
@@ -87,7 +83,6 @@ typedef enum {
     MBEDTLS_PK_ECDSA,
     MBEDTLS_PK_RSA_ALT,
     MBEDTLS_PK_RSASSA_PSS,
-    MBEDTLS_PK_OPAQUE,
 } mbedtls_pk_type_t;
 
 /**
@@ -202,40 +197,23 @@ typedef size_t (*mbedtls_pk_rsa_alt_key_len_func)( void *ctx );
 const mbedtls_pk_info_t *mbedtls_pk_info_from_type( mbedtls_pk_type_t pk_type );
 
 /**
- * \brief           Initialize a #mbedtls_pk_context (as NONE).
- *
- * \param ctx       The context to initialize.
- *                  This must not be \c NULL.
+ * \brief           Initialize a mbedtls_pk_context (as NONE)
  */
 void mbedtls_pk_init( mbedtls_pk_context *ctx );
 
 /**
- * \brief           Free the components of a #mbedtls_pk_context.
- *
- * \param ctx       The context to clear. It must have been initialized.
- *                  If this is \c NULL, this function does nothing.
- *
- * \note            For contexts that have been set up with
- *                  mbedtls_pk_setup_opaque(), this does not free the underlying
- *                  key slot and you still need to call psa_destroy_key()
- *                  independently if you want to destroy that key.
+ * \brief           Free a mbedtls_pk_context
  */
 void mbedtls_pk_free( mbedtls_pk_context *ctx );
 
 #if defined(MBEDTLS_ECDSA_C) && defined(MBEDTLS_ECP_RESTARTABLE)
 /**
  * \brief           Initialize a restart context
- *
- * \param ctx       The context to initialize.
- *                  This must not be \c NULL.
  */
 void mbedtls_pk_restart_init( mbedtls_pk_restart_ctx *ctx );
 
 /**
  * \brief           Free the components of a restart context
- *
- * \param ctx       The context to clear. It must have been initialized.
- *                  If this is \c NULL, this function does nothing.
  */
 void mbedtls_pk_restart_free( mbedtls_pk_restart_ctx *ctx );
 #endif /* MBEDTLS_ECDSA_C && MBEDTLS_ECP_RESTARTABLE */
@@ -244,8 +222,7 @@ void mbedtls_pk_restart_free( mbedtls_pk_restart_ctx *ctx );
  * \brief           Initialize a PK context with the information given
  *                  and allocates the type-specific PK subcontext.
  *
- * \param ctx       Context to initialize. It must not have been set
- *                  up yet (type #MBEDTLS_PK_NONE).
+ * \param ctx       Context to initialize. Must be empty (type NONE).
  * \param info      Information to use
  *
  * \return          0 on success,
@@ -257,44 +234,11 @@ void mbedtls_pk_restart_free( mbedtls_pk_restart_ctx *ctx );
  */
 int mbedtls_pk_setup( mbedtls_pk_context *ctx, const mbedtls_pk_info_t *info );
 
-#if defined(MBEDTLS_USE_PSA_CRYPTO)
-/**
- * \brief           Initialize a PK context to wrap a PSA key slot.
- *
- * \note            This function replaces mbedtls_pk_setup() for contexts
- *                  that wrap a (possibly opaque) PSA key slot instead of
- *                  storing and manipulating the key material directly.
- *
- * \param ctx       The context to initialize. It must be empty (type NONE).
- * \param key       The PSA key slot to wrap, which must hold an ECC key pair
- *                  (see notes below).
- *
- * \note            The wrapped key slot must remain valid as long as the
- *                  wrapping PK context is in use, that is at least between
- *                  the point this function is called and the point
- *                  mbedtls_pk_free() is called on this context. The wrapped
- *                  key slot might then be independently used or destroyed.
- *
- * \note            This function is currently only available for ECC key
- *                  pairs (that is, ECC keys containing private key material).
- *                  Support for other key types may be added later.
- *
- * \return          \c 0 on success.
- * \return          #MBEDTLS_ERR_PK_BAD_INPUT_DATA on invalid input
- *                  (context already used, invalid key slot).
- * \return          #MBEDTLS_ERR_PK_FEATURE_UNAVAILABLE if the key is not an
- *                  ECC key pair.
- * \return          #MBEDTLS_ERR_PK_ALLOC_FAILED on allocation failure.
- */
-int mbedtls_pk_setup_opaque( mbedtls_pk_context *ctx, const psa_key_handle_t key );
-#endif /* MBEDTLS_USE_PSA_CRYPTO */
-
 #if defined(MBEDTLS_PK_RSA_ALT_SUPPORT)
 /**
  * \brief           Initialize an RSA-alt context
  *
- * \param ctx       Context to initialize. It must not have been set
- *                  up yet (type #MBEDTLS_PK_NONE).
+ * \param ctx       Context to initialize. Must be empty (type NONE).
  * \param key       RSA key pointer
  * \param decrypt_func  Decryption function
  * \param sign_func     Signing function
@@ -314,7 +258,7 @@ int mbedtls_pk_setup_rsa_alt( mbedtls_pk_context *ctx, void * key,
 /**
  * \brief           Get the size in bits of the underlying key
  *
- * \param ctx       The context to query. It must have been initialized.
+ * \param ctx       Context to use
  *
  * \return          Key size in bits, or 0 on error
  */
@@ -322,8 +266,7 @@ size_t mbedtls_pk_get_bitlen( const mbedtls_pk_context *ctx );
 
 /**
  * \brief           Get the length in bytes of the underlying key
- *
- * \param ctx       The context to query. It must have been initialized.
+ * \param ctx       Context to use
  *
  * \return          Key length in bytes, or 0 on error
  */
@@ -335,21 +278,18 @@ static inline size_t mbedtls_pk_get_len( const mbedtls_pk_context *ctx )
 /**
  * \brief           Tell if a context can do the operation given by type
  *
- * \param ctx       The context to query. It must have been initialized.
- * \param type      The desired type.
+ * \param ctx       Context to test
+ * \param type      Target type
  *
- * \return          1 if the context can do operations on the given type.
- * \return          0 if the context cannot do the operations on the given
- *                  type. This is always the case for a context that has
- *                  been initialized but not set up, or that has been
- *                  cleared with mbedtls_pk_free().
+ * \return          0 if context can't do the operations,
+ *                  1 otherwise.
  */
 int mbedtls_pk_can_do( const mbedtls_pk_context *ctx, mbedtls_pk_type_t type );
 
 /**
  * \brief           Verify signature (including padding if relevant).
  *
- * \param ctx       The PK context to use. It must have been set up.
+ * \param ctx       PK context to use
  * \param md_alg    Hash algorithm used (see notes)
  * \param hash      Hash of the message to sign
  * \param hash_len  Hash length or 0 (see notes)
@@ -382,7 +322,7 @@ int mbedtls_pk_verify( mbedtls_pk_context *ctx, mbedtls_md_type_t md_alg,
  *                  \c mbedtls_ecp_set_max_ops() to reduce blocking for ECC
  *                  operations. For RSA, same as \c mbedtls_pk_verify().
  *
- * \param ctx       The PK context to use. It must have been set up.
+ * \param ctx       PK context to use
  * \param md_alg    Hash algorithm used (see notes)
  * \param hash      Hash of the message to sign
  * \param hash_len  Hash length or 0 (see notes)
@@ -406,7 +346,7 @@ int mbedtls_pk_verify_restartable( mbedtls_pk_context *ctx,
  *
  * \param type      Signature type (inc. possible padding type) to verify
  * \param options   Pointer to type-specific options, or NULL
- * \param ctx       The PK context to use. It must have been set up.
+ * \param ctx       PK context to use
  * \param md_alg    Hash algorithm used (see notes)
  * \param hash      Hash of the message to sign
  * \param hash_len  Hash length or 0 (see notes)
@@ -437,8 +377,7 @@ int mbedtls_pk_verify_ext( mbedtls_pk_type_t type, const void *options,
 /**
  * \brief           Make signature, including padding if relevant.
  *
- * \param ctx       The PK context to use. It must have been set up
- *                  with a private key.
+ * \param ctx       PK context to use - must hold a private key
  * \param md_alg    Hash algorithm used (see notes)
  * \param hash      Hash of the message to sign
  * \param hash_len  Hash length or 0 (see notes)
@@ -472,8 +411,7 @@ int mbedtls_pk_sign( mbedtls_pk_context *ctx, mbedtls_md_type_t md_alg,
  *                  \c mbedtls_ecp_set_max_ops() to reduce blocking for ECC
  *                  operations. For RSA, same as \c mbedtls_pk_sign().
  *
- * \param ctx       The PK context to use. It must have been set up
- *                  with a private key.
+ * \param ctx       PK context to use - must hold a private key
  * \param md_alg    Hash algorithm used (see notes)
  * \param hash      Hash of the message to sign
  * \param hash_len  Hash length or 0 (see notes)
@@ -497,8 +435,7 @@ int mbedtls_pk_sign_restartable( mbedtls_pk_context *ctx,
 /**
  * \brief           Decrypt message (including padding if relevant).
  *
- * \param ctx       The PK context to use. It must have been set up
- *                  with a private key.
+ * \param ctx       PK context to use - must hold a private key
  * \param input     Input to decrypt
  * \param ilen      Input size
  * \param output    Decrypted output
@@ -519,7 +456,7 @@ int mbedtls_pk_decrypt( mbedtls_pk_context *ctx,
 /**
  * \brief           Encrypt message (including padding if relevant).
  *
- * \param ctx       The PK context to use. It must have been set up.
+ * \param ctx       PK context to use
  * \param input     Message to encrypt
  * \param ilen      Message size
  * \param output    Encrypted output
@@ -543,18 +480,14 @@ int mbedtls_pk_encrypt( mbedtls_pk_context *ctx,
  * \param pub       Context holding a public key.
  * \param prv       Context holding a private (and public) key.
  *
- * \return          \c 0 on success (keys were checked and match each other).
- * \return          #MBEDTLS_ERR_PK_FEATURE_UNAVAILABLE if the keys could not
- *                  be checked - in that case they may or may not match.
- * \return          #MBEDTLS_ERR_PK_BAD_INPUT_DATA if a context is invalid.
- * \return          Another non-zero value if the keys do not match.
+ * \return          0 on success or MBEDTLS_ERR_PK_BAD_INPUT_DATA
  */
 int mbedtls_pk_check_pair( const mbedtls_pk_context *pub, const mbedtls_pk_context *prv );
 
 /**
  * \brief           Export debug information
  *
- * \param ctx       The PK context to use. It must have been initialized.
+ * \param ctx       Context to use
  * \param items     Place to write debug items
  *
  * \return          0 on success or MBEDTLS_ERR_PK_BAD_INPUT_DATA
@@ -564,7 +497,7 @@ int mbedtls_pk_debug( const mbedtls_pk_context *ctx, mbedtls_pk_debug_item *item
 /**
  * \brief           Access the type name
  *
- * \param ctx       The PK context to use. It must have been initialized.
+ * \param ctx       Context to use
  *
  * \return          Type name on success, or "invalid PK"
  */
@@ -573,10 +506,9 @@ const char * mbedtls_pk_get_name( const mbedtls_pk_context *ctx );
 /**
  * \brief           Get the key type
  *
- * \param ctx       The PK context to use. It must have been initialized.
+ * \param ctx       Context to use
  *
- * \return          Type on success.
- * \return          #MBEDTLS_PK_NONE for a context that has not been set up.
+ * \return          Type on success, or MBEDTLS_PK_NONE
  */
 mbedtls_pk_type_t mbedtls_pk_get_type( const mbedtls_pk_context *ctx );
 
@@ -585,22 +517,12 @@ mbedtls_pk_type_t mbedtls_pk_get_type( const mbedtls_pk_context *ctx );
 /**
  * \brief           Parse a private key in PEM or DER format
  *
- * \param ctx       The PK context to fill. It must have been initialized
- *                  but not set up.
- * \param key       Input buffer to parse.
- *                  The buffer must contain the input exactly, with no
- *                  extra trailing material. For PEM, the buffer must
- *                  contain a null-terminated string.
- * \param keylen    Size of \b key in bytes.
- *                  For PEM data, this includes the terminating null byte,
- *                  so \p keylen must be equal to `strlen(key) + 1`.
- * \param pwd       Optional password for decryption.
- *                  Pass \c NULL if expecting a non-encrypted key.
- *                  Pass a string of \p pwdlen bytes if expecting an encrypted
- *                  key; a non-encrypted key will also be accepted.
- *                  The empty password is not supported.
- * \param pwdlen    Size of the password in bytes.
- *                  Ignored if \p pwd is \c NULL.
+ * \param ctx       key to be initialized
+ * \param key       input buffer
+ * \param keylen    size of the buffer
+ *                  (including the terminating null byte for PEM data)
+ * \param pwd       password for decryption (optional)
+ * \param pwdlen    size of the password
  *
  * \note            On entry, ctx must be empty, either freshly initialised
  *                  with mbedtls_pk_init() or reset with mbedtls_pk_free(). If you need a
@@ -618,15 +540,10 @@ int mbedtls_pk_parse_key( mbedtls_pk_context *ctx,
 /**
  * \brief           Parse a public key in PEM or DER format
  *
- * \param ctx       The PK context to fill. It must have been initialized
- *                  but not set up.
- * \param key       Input buffer to parse.
- *                  The buffer must contain the input exactly, with no
- *                  extra trailing material. For PEM, the buffer must
- *                  contain a null-terminated string.
- * \param keylen    Size of \b key in bytes.
- *                  For PEM data, this includes the terminating null byte,
- *                  so \p keylen must be equal to `strlen(key) + 1`.
+ * \param ctx       key to be initialized
+ * \param key       input buffer
+ * \param keylen    size of the buffer
+ *                  (including the terminating null byte for PEM data)
  *
  * \note            On entry, ctx must be empty, either freshly initialised
  *                  with mbedtls_pk_init() or reset with mbedtls_pk_free(). If you need a
@@ -644,14 +561,9 @@ int mbedtls_pk_parse_public_key( mbedtls_pk_context *ctx,
 /**
  * \brief           Load and parse a private key
  *
- * \param ctx       The PK context to fill. It must have been initialized
- *                  but not set up.
+ * \param ctx       key to be initialized
  * \param path      filename to read the private key from
- * \param password  Optional password to decrypt the file.
- *                  Pass \c NULL if expecting a non-encrypted key.
- *                  Pass a null-terminated string if expecting an encrypted
- *                  key; a non-encrypted key will also be accepted.
- *                  The empty password is not supported.
+ * \param password  password to decrypt the file (can be NULL)
  *
  * \note            On entry, ctx must be empty, either freshly initialised
  *                  with mbedtls_pk_init() or reset with mbedtls_pk_free(). If you need a
@@ -668,8 +580,7 @@ int mbedtls_pk_parse_keyfile( mbedtls_pk_context *ctx,
 /**
  * \brief           Load and parse a public key
  *
- * \param ctx       The PK context to fill. It must have been initialized
- *                  but not set up.
+ * \param ctx       key to be initialized
  * \param path      filename to read the public key from
  *
  * \note            On entry, ctx must be empty, either freshly initialised
@@ -692,7 +603,7 @@ int mbedtls_pk_parse_public_keyfile( mbedtls_pk_context *ctx, const char *path )
  *                        return value to determine where you should start
  *                        using the buffer
  *
- * \param ctx       PK context which must contain a valid private key.
+ * \param ctx       private to write away
  * \param buf       buffer to write to
  * \param size      size of the buffer
  *
@@ -707,7 +618,7 @@ int mbedtls_pk_write_key_der( mbedtls_pk_context *ctx, unsigned char *buf, size_
  *                        return value to determine where you should start
  *                        using the buffer
  *
- * \param ctx       PK context which must contain a valid public or private key.
+ * \param ctx       public key to write away
  * \param buf       buffer to write to
  * \param size      size of the buffer
  *
@@ -720,10 +631,9 @@ int mbedtls_pk_write_pubkey_der( mbedtls_pk_context *ctx, unsigned char *buf, si
 /**
  * \brief           Write a public key to a PEM string
  *
- * \param ctx       PK context which must contain a valid public or private key.
- * \param buf       Buffer to write to. The output includes a
- *                  terminating null byte.
- * \param size      Size of the buffer in bytes.
+ * \param ctx       public key to write away
+ * \param buf       buffer to write to
+ * \param size      size of the buffer
  *
  * \return          0 if successful, or a specific error code
  */
@@ -732,10 +642,9 @@ int mbedtls_pk_write_pubkey_pem( mbedtls_pk_context *ctx, unsigned char *buf, si
 /**
  * \brief           Write a private key to a PKCS#1 or SEC1 PEM string
  *
- * \param ctx       PK context which must contain a valid private key.
- * \param buf       Buffer to write to. The output includes a
- *                  terminating null byte.
- * \param size      Size of the buffer in bytes.
+ * \param ctx       private to write away
+ * \param buf       buffer to write to
+ * \param size      size of the buffer
  *
  * \return          0 if successful, or a specific error code
  */
@@ -754,8 +663,7 @@ int mbedtls_pk_write_key_pem( mbedtls_pk_context *ctx, unsigned char *buf, size_
  *
  * \param p         the position in the ASN.1 data
  * \param end       end of the buffer
- * \param pk        The PK context to fill. It must have been initialized
- *                  but not set up.
+ * \param pk        the key to fill
  *
  * \return          0 if successful, or a specific PK error code
  */
@@ -770,7 +678,7 @@ int mbedtls_pk_parse_subpubkey( unsigned char **p, const unsigned char *end,
  *
  * \param p         reference to current position pointer
  * \param start     start of the buffer (for bounds-checking)
- * \param key       PK context which must contain a valid public or private key.
+ * \param key       public key to write away
  *
  * \return          the length written or a negative error code
  */
@@ -785,31 +693,6 @@ int mbedtls_pk_write_pubkey( unsigned char **p, unsigned char *start,
 #if defined(MBEDTLS_FS_IO)
 int mbedtls_pk_load_file( const char *path, unsigned char **buf, size_t *n );
 #endif
-
-#if defined(MBEDTLS_USE_PSA_CRYPTO)
-/**
- * \brief           Turn an EC key into an Opaque one
- *
- * \warning         This is a temporary utility function for tests. It might
- *                  change or be removed at any time without notice.
- *
- * \note            Only ECDSA keys are supported so far. Signing with the
- *                  specified hash is the only allowed use of that key.
- *
- * \param pk        Input: the EC key to transfer to a PSA key slot.
- *                  Output: a PK context wrapping that PSA key slot.
- * \param slot      Output: the chosen slot for storing the key.
- *                  It's the caller's responsibility to destroy that slot
- *                  after calling mbedtls_pk_free() on the PK context.
- * \param hash_alg  The hash algorithm to allow for use with that key.
- *
- * \return          \c 0 if successful.
- * \return          An Mbed TLS error code otherwise.
- */
-int mbedtls_pk_wrap_as_opaque( mbedtls_pk_context *pk,
-                               psa_key_handle_t *slot,
-                               psa_algorithm_t hash_alg );
-#endif /* MBEDTLS_USE_PSA_CRYPTO */
 
 #ifdef __cplusplus
 }

@@ -36,7 +36,6 @@
 #endif
 
 #include <stddef.h>
-#include "platform_util.h"
 
 #if defined(MBEDTLS_GCM_C) || defined(MBEDTLS_CCM_C) || defined(MBEDTLS_CHACHAPOLY_C)
 #define MBEDTLS_CIPHER_MODE_AEAD
@@ -176,29 +175,21 @@ typedef enum {
     MBEDTLS_CIPHER_AES_256_XTS,          /**< AES 256-bit cipher in XTS block mode. */
     MBEDTLS_CIPHER_CHACHA20,             /**< ChaCha20 stream cipher. */
     MBEDTLS_CIPHER_CHACHA20_POLY1305,    /**< ChaCha20-Poly1305 AEAD cipher. */
-    MBEDTLS_CIPHER_AES_128_KW,           /**< AES cipher with 128-bit NIST KW mode. */
-    MBEDTLS_CIPHER_AES_192_KW,           /**< AES cipher with 192-bit NIST KW mode. */
-    MBEDTLS_CIPHER_AES_256_KW,           /**< AES cipher with 256-bit NIST KW mode. */
-    MBEDTLS_CIPHER_AES_128_KWP,          /**< AES cipher with 128-bit NIST KWP mode. */
-    MBEDTLS_CIPHER_AES_192_KWP,          /**< AES cipher with 192-bit NIST KWP mode. */
-    MBEDTLS_CIPHER_AES_256_KWP,          /**< AES cipher with 256-bit NIST KWP mode. */
 } mbedtls_cipher_type_t;
 
 /** Supported cipher modes. */
 typedef enum {
-    MBEDTLS_MODE_NONE = 0,               /**< None.                        */
-    MBEDTLS_MODE_ECB,                    /**< The ECB cipher mode.         */
-    MBEDTLS_MODE_CBC,                    /**< The CBC cipher mode.         */
-    MBEDTLS_MODE_CFB,                    /**< The CFB cipher mode.         */
-    MBEDTLS_MODE_OFB,                    /**< The OFB cipher mode.         */
-    MBEDTLS_MODE_CTR,                    /**< The CTR cipher mode.         */
-    MBEDTLS_MODE_GCM,                    /**< The GCM cipher mode.         */
-    MBEDTLS_MODE_STREAM,                 /**< The stream cipher mode.      */
-    MBEDTLS_MODE_CCM,                    /**< The CCM cipher mode.         */
-    MBEDTLS_MODE_XTS,                    /**< The XTS cipher mode.         */
+    MBEDTLS_MODE_NONE = 0,               /**< None. */
+    MBEDTLS_MODE_ECB,                    /**< The ECB cipher mode. */
+    MBEDTLS_MODE_CBC,                    /**< The CBC cipher mode. */
+    MBEDTLS_MODE_CFB,                    /**< The CFB cipher mode. */
+    MBEDTLS_MODE_OFB,                    /**< The OFB cipher mode. */
+    MBEDTLS_MODE_CTR,                    /**< The CTR cipher mode. */
+    MBEDTLS_MODE_GCM,                    /**< The GCM cipher mode. */
+    MBEDTLS_MODE_STREAM,                 /**< The stream cipher mode. */
+    MBEDTLS_MODE_CCM,                    /**< The CCM cipher mode. */
+    MBEDTLS_MODE_XTS,                    /**< The XTS cipher mode. */
     MBEDTLS_MODE_CHACHAPOLY,             /**< The ChaCha-Poly cipher mode. */
-    MBEDTLS_MODE_KW,                     /**< The SP800-38F KW mode */
-    MBEDTLS_MODE_KWP,                    /**< The SP800-38F KWP mode */
 } mbedtls_cipher_mode_t;
 
 /** Supported cipher padding types. */
@@ -330,32 +321,14 @@ typedef struct mbedtls_cipher_context_t
     /** CMAC-specific context. */
     mbedtls_cmac_context_t *cmac_ctx;
 #endif
-
-#if defined(MBEDTLS_USE_PSA_CRYPTO)
-    /** Indicates whether the cipher operations should be performed
-     *  by Mbed TLS' own crypto library or an external implementation
-     *  of the PSA Crypto API.
-     *  This is unset if the cipher context was established through
-     *  mbedtls_cipher_setup(), and set if it was established through
-     *  mbedtls_cipher_setup_psa().
-     */
-    unsigned char psa_enabled;
-#endif /* MBEDTLS_USE_PSA_CRYPTO */
-
 } mbedtls_cipher_context_t;
 
 /**
- * \brief This function retrieves the list of ciphers supported
- *        by the generic cipher module.
+ * \brief This function retrieves the list of ciphers supported by the generic
+ * cipher module.
  *
- *        For any cipher identifier in the returned list, you can
- *        obtain the corresponding generic cipher information structure
- *        via mbedtls_cipher_info_from_type(), which can then be used
- *        to prepare a cipher context via mbedtls_cipher_setup().
- *
- *
- * \return      A statically-allocated array of cipher identifiers
- *              of type cipher_type_t. The last entry is zero.
+ * \return      A statically-allocated array of ciphers. The last entry
+ *              is zero.
  */
 const int *mbedtls_cipher_list( void );
 
@@ -363,12 +336,11 @@ const int *mbedtls_cipher_list( void );
  * \brief               This function retrieves the cipher-information
  *                      structure associated with the given cipher name.
  *
- * \param cipher_name   Name of the cipher to search for. This must not be
- *                      \c NULL.
+ * \param cipher_name   Name of the cipher to search for.
  *
  * \return              The cipher information structure associated with the
  *                      given \p cipher_name.
- * \return              \c NULL if the associated cipher information is not found.
+ * \return              NULL if the associated cipher information is not found.
  */
 const mbedtls_cipher_info_t *mbedtls_cipher_info_from_string( const char *cipher_name );
 
@@ -380,7 +352,7 @@ const mbedtls_cipher_info_t *mbedtls_cipher_info_from_string( const char *cipher
  *
  * \return              The cipher information structure associated with the
  *                      given \p cipher_type.
- * \return              \c NULL if the associated cipher information is not found.
+ * \return              NULL if the associated cipher information is not found.
  */
 const mbedtls_cipher_info_t *mbedtls_cipher_info_from_type( const mbedtls_cipher_type_t cipher_type );
 
@@ -396,7 +368,7 @@ const mbedtls_cipher_info_t *mbedtls_cipher_info_from_type( const mbedtls_cipher
  *
  * \return              The cipher information structure associated with the
  *                      given \p cipher_id.
- * \return              \c NULL if the associated cipher information is not found.
+ * \return              NULL if the associated cipher information is not found.
  */
 const mbedtls_cipher_info_t *mbedtls_cipher_info_from_values( const mbedtls_cipher_id_t cipher_id,
                                               int key_bitlen,
@@ -404,8 +376,6 @@ const mbedtls_cipher_info_t *mbedtls_cipher_info_from_values( const mbedtls_ciph
 
 /**
  * \brief               This function initializes a \p cipher_context as NONE.
- *
- * \param ctx           The context to be initialized. This must not be \c NULL.
  */
 void mbedtls_cipher_init( mbedtls_cipher_context_t *ctx );
 
@@ -413,19 +383,16 @@ void mbedtls_cipher_init( mbedtls_cipher_context_t *ctx );
  * \brief               This function frees and clears the cipher-specific
  *                      context of \p ctx. Freeing \p ctx itself remains the
  *                      responsibility of the caller.
- *
- * \param ctx           The context to be freed. If this is \c NULL, the
- *                      function has no effect, otherwise this must point to an
- *                      initialized context.
  */
 void mbedtls_cipher_free( mbedtls_cipher_context_t *ctx );
 
 
 /**
- * \brief               This function initializes a cipher context for
- *                      use with the given cipher primitive.
+ * \brief               This function initializes and fills the cipher-context
+ *                      structure with the appropriate values. It also clears
+ *                      the structure.
  *
- * \param ctx           The context to initialize. This must be initialized.
+ * \param ctx           The context to initialize. May not be NULL.
  * \param cipher_info   The cipher to use.
  *
  * \return              \c 0 on success.
@@ -438,49 +405,19 @@ void mbedtls_cipher_free( mbedtls_cipher_context_t *ctx );
  * In future versions, the caller will be required to call
  * mbedtls_cipher_init() on the structure first.
  */
-int mbedtls_cipher_setup( mbedtls_cipher_context_t *ctx,
-                          const mbedtls_cipher_info_t *cipher_info );
-
-#if defined(MBEDTLS_USE_PSA_CRYPTO)
-/**
- * \brief               This function initializes a cipher context for
- *                      PSA-based use with the given cipher primitive.
- *
- * \note                See #MBEDTLS_USE_PSA_CRYPTO for information on PSA.
- *
- * \param ctx           The context to initialize. May not be \c NULL.
- * \param cipher_info   The cipher to use.
- * \param taglen        For AEAD ciphers, the length in bytes of the
- *                      authentication tag to use. Subsequent uses of
- *                      mbedtls_cipher_auth_encrypt() or
- *                      mbedtls_cipher_auth_decrypt() must provide
- *                      the same tag length.
- *                      For non-AEAD ciphers, the value must be \c 0.
- *
- * \return              \c 0 on success.
- * \return              #MBEDTLS_ERR_CIPHER_BAD_INPUT_DATA on
- *                      parameter-verification failure.
- * \return              #MBEDTLS_ERR_CIPHER_ALLOC_FAILED if allocation of the
- *                      cipher-specific context fails.
- */
-int mbedtls_cipher_setup_psa( mbedtls_cipher_context_t *ctx,
-                              const mbedtls_cipher_info_t *cipher_info,
-                              size_t taglen );
-#endif /* MBEDTLS_USE_PSA_CRYPTO */
+int mbedtls_cipher_setup( mbedtls_cipher_context_t *ctx, const mbedtls_cipher_info_t *cipher_info );
 
 /**
  * \brief        This function returns the block size of the given cipher.
  *
- * \param ctx    The context of the cipher. This must be initialized.
+ * \param ctx    The context of the cipher. Must be initialized.
  *
- * \return       The block size of the underlying cipher.
- * \return       \c 0 if \p ctx has not been initialized.
+ * \return       The size of the blocks of the cipher.
+ * \return       0 if \p ctx has not been initialized.
  */
-static inline unsigned int mbedtls_cipher_get_block_size(
-    const mbedtls_cipher_context_t *ctx )
+static inline unsigned int mbedtls_cipher_get_block_size( const mbedtls_cipher_context_t *ctx )
 {
-    MBEDTLS_INTERNAL_VALIDATE_RET( ctx != NULL, 0 );
-    if( ctx->cipher_info == NULL )
+    if( NULL == ctx || NULL == ctx->cipher_info )
         return 0;
 
     return ctx->cipher_info->block_size;
@@ -490,16 +427,14 @@ static inline unsigned int mbedtls_cipher_get_block_size(
  * \brief        This function returns the mode of operation for
  *               the cipher. For example, MBEDTLS_MODE_CBC.
  *
- * \param ctx    The context of the cipher. This must be initialized.
+ * \param ctx    The context of the cipher. Must be initialized.
  *
  * \return       The mode of operation.
  * \return       #MBEDTLS_MODE_NONE if \p ctx has not been initialized.
  */
-static inline mbedtls_cipher_mode_t mbedtls_cipher_get_cipher_mode(
-    const mbedtls_cipher_context_t *ctx )
+static inline mbedtls_cipher_mode_t mbedtls_cipher_get_cipher_mode( const mbedtls_cipher_context_t *ctx )
 {
-    MBEDTLS_INTERNAL_VALIDATE_RET( ctx != NULL, MBEDTLS_MODE_NONE );
-    if( ctx->cipher_info == NULL )
+    if( NULL == ctx || NULL == ctx->cipher_info )
         return MBEDTLS_MODE_NONE;
 
     return ctx->cipher_info->mode;
@@ -509,17 +444,15 @@ static inline mbedtls_cipher_mode_t mbedtls_cipher_get_cipher_mode(
  * \brief       This function returns the size of the IV or nonce
  *              of the cipher, in Bytes.
  *
- * \param ctx   The context of the cipher. This must be initialized.
+ * \param ctx   The context of the cipher. Must be initialized.
  *
  * \return      The recommended IV size if no IV has been set.
  * \return      \c 0 for ciphers not using an IV or a nonce.
  * \return      The actual size if an IV has been set.
  */
-static inline int mbedtls_cipher_get_iv_size(
-    const mbedtls_cipher_context_t *ctx )
+static inline int mbedtls_cipher_get_iv_size( const mbedtls_cipher_context_t *ctx )
 {
-    MBEDTLS_INTERNAL_VALIDATE_RET( ctx != NULL, 0 );
-    if( ctx->cipher_info == NULL )
+    if( NULL == ctx || NULL == ctx->cipher_info )
         return 0;
 
     if( ctx->iv_size != 0 )
@@ -531,17 +464,14 @@ static inline int mbedtls_cipher_get_iv_size(
 /**
  * \brief               This function returns the type of the given cipher.
  *
- * \param ctx           The context of the cipher. This must be initialized.
+ * \param ctx           The context of the cipher. Must be initialized.
  *
  * \return              The type of the cipher.
  * \return              #MBEDTLS_CIPHER_NONE if \p ctx has not been initialized.
  */
-static inline mbedtls_cipher_type_t mbedtls_cipher_get_type(
-    const mbedtls_cipher_context_t *ctx )
+static inline mbedtls_cipher_type_t mbedtls_cipher_get_type( const mbedtls_cipher_context_t *ctx )
 {
-    MBEDTLS_INTERNAL_VALIDATE_RET(
-        ctx != NULL, MBEDTLS_CIPHER_NONE );
-    if( ctx->cipher_info == NULL )
+    if( NULL == ctx || NULL == ctx->cipher_info )
         return MBEDTLS_CIPHER_NONE;
 
     return ctx->cipher_info->type;
@@ -551,16 +481,14 @@ static inline mbedtls_cipher_type_t mbedtls_cipher_get_type(
  * \brief               This function returns the name of the given cipher
  *                      as a string.
  *
- * \param ctx           The context of the cipher. This must be initialized.
+ * \param ctx           The context of the cipher. Must be initialized.
  *
  * \return              The name of the cipher.
  * \return              NULL if \p ctx has not been not initialized.
  */
-static inline const char *mbedtls_cipher_get_name(
-    const mbedtls_cipher_context_t *ctx )
+static inline const char *mbedtls_cipher_get_name( const mbedtls_cipher_context_t *ctx )
 {
-    MBEDTLS_INTERNAL_VALIDATE_RET( ctx != NULL, 0 );
-    if( ctx->cipher_info == NULL )
+    if( NULL == ctx || NULL == ctx->cipher_info )
         return 0;
 
     return ctx->cipher_info->name;
@@ -569,18 +497,15 @@ static inline const char *mbedtls_cipher_get_name(
 /**
  * \brief               This function returns the key length of the cipher.
  *
- * \param ctx           The context of the cipher. This must be initialized.
+ * \param ctx           The context of the cipher. Must be initialized.
  *
  * \return              The key length of the cipher in bits.
  * \return              #MBEDTLS_KEY_LENGTH_NONE if ctx \p has not been
  *                      initialized.
  */
-static inline int mbedtls_cipher_get_key_bitlen(
-    const mbedtls_cipher_context_t *ctx )
+static inline int mbedtls_cipher_get_key_bitlen( const mbedtls_cipher_context_t *ctx )
 {
-    MBEDTLS_INTERNAL_VALIDATE_RET(
-        ctx != NULL, MBEDTLS_KEY_LENGTH_NONE );
-    if( ctx->cipher_info == NULL )
+    if( NULL == ctx || NULL == ctx->cipher_info )
         return MBEDTLS_KEY_LENGTH_NONE;
 
     return (int) ctx->cipher_info->key_bitlen;
@@ -589,17 +514,14 @@ static inline int mbedtls_cipher_get_key_bitlen(
 /**
  * \brief          This function returns the operation of the given cipher.
  *
- * \param ctx      The context of the cipher. This must be initialized.
+ * \param ctx      The context of the cipher. Must be initialized.
  *
  * \return         The type of operation: #MBEDTLS_ENCRYPT or #MBEDTLS_DECRYPT.
  * \return         #MBEDTLS_OPERATION_NONE if \p ctx has not been initialized.
  */
-static inline mbedtls_operation_t mbedtls_cipher_get_operation(
-    const mbedtls_cipher_context_t *ctx )
+static inline mbedtls_operation_t mbedtls_cipher_get_operation( const mbedtls_cipher_context_t *ctx )
 {
-    MBEDTLS_INTERNAL_VALIDATE_RET(
-        ctx != NULL, MBEDTLS_OPERATION_NONE );
-    if( ctx->cipher_info == NULL )
+    if( NULL == ctx || NULL == ctx->cipher_info )
         return MBEDTLS_OPERATION_NONE;
 
     return ctx->operation;
@@ -608,11 +530,11 @@ static inline mbedtls_operation_t mbedtls_cipher_get_operation(
 /**
  * \brief               This function sets the key to use with the given context.
  *
- * \param ctx           The generic cipher context. This must be initialized and
- *                      bound to a cipher information structure.
- * \param key           The key to use. This must be a readable buffer of at
- *                      least \p key_bitlen Bits.
- * \param key_bitlen    The key length to use, in Bits.
+ * \param ctx           The generic cipher context. May not be NULL. Must have
+ *                      been initialized using mbedtls_cipher_info_from_type()
+ *                      or mbedtls_cipher_info_from_string().
+ * \param key           The key to use.
+ * \param key_bitlen    The key length to use, in bits.
  * \param operation     The operation that the key will be used for:
  *                      #MBEDTLS_ENCRYPT or #MBEDTLS_DECRYPT.
  *
@@ -621,10 +543,8 @@ static inline mbedtls_operation_t mbedtls_cipher_get_operation(
  *                      parameter-verification failure.
  * \return              A cipher-specific error code on failure.
  */
-int mbedtls_cipher_setkey( mbedtls_cipher_context_t *ctx,
-                           const unsigned char *key,
-                           int key_bitlen,
-                           const mbedtls_operation_t operation );
+int mbedtls_cipher_setkey( mbedtls_cipher_context_t *ctx, const unsigned char *key,
+                   int key_bitlen, const mbedtls_operation_t operation );
 
 #if defined(MBEDTLS_CIPHER_MODE_WITH_PADDING)
 /**
@@ -633,8 +553,7 @@ int mbedtls_cipher_setkey( mbedtls_cipher_context_t *ctx,
  *
  *                      The default passing mode is PKCS7 padding.
  *
- * \param ctx           The generic cipher context. This must be initialized and
- *                      bound to a cipher information structure.
+ * \param ctx           The generic cipher context.
  * \param mode          The padding mode.
  *
  * \return              \c 0 on success.
@@ -643,8 +562,7 @@ int mbedtls_cipher_setkey( mbedtls_cipher_context_t *ctx,
  * \return              #MBEDTLS_ERR_CIPHER_BAD_INPUT_DATA if the cipher mode
  *                      does not support padding.
  */
-int mbedtls_cipher_set_padding_mode( mbedtls_cipher_context_t *ctx,
-                                     mbedtls_cipher_padding_t mode );
+int mbedtls_cipher_set_padding_mode( mbedtls_cipher_context_t *ctx, mbedtls_cipher_padding_t mode );
 #endif /* MBEDTLS_CIPHER_MODE_WITH_PADDING */
 
 /**
@@ -654,10 +572,8 @@ int mbedtls_cipher_set_padding_mode( mbedtls_cipher_context_t *ctx,
  * \note            Some ciphers do not use IVs nor nonce. For these
  *                  ciphers, this function has no effect.
  *
- * \param ctx       The generic cipher context. This must be initialized and
- *                  bound to a cipher information structure.
- * \param iv        The IV to use, or NONCE_COUNTER for CTR-mode ciphers. This
- *                  must be a readable buffer of at least \p iv_len Bytes.
+ * \param ctx       The generic cipher context.
+ * \param iv        The IV to use, or NONCE_COUNTER for CTR-mode ciphers.
  * \param iv_len    The IV length for ciphers with variable-size IV.
  *                  This parameter is discarded by ciphers with fixed-size IV.
  *
@@ -666,13 +582,12 @@ int mbedtls_cipher_set_padding_mode( mbedtls_cipher_context_t *ctx,
  *                  parameter-verification failure.
  */
 int mbedtls_cipher_set_iv( mbedtls_cipher_context_t *ctx,
-                           const unsigned char *iv,
-                           size_t iv_len );
+                   const unsigned char *iv, size_t iv_len );
 
 /**
  * \brief         This function resets the cipher state.
  *
- * \param ctx     The generic cipher context. This must be initialized.
+ * \param ctx     The generic cipher context.
  *
  * \return        \c 0 on success.
  * \return        #MBEDTLS_ERR_CIPHER_BAD_INPUT_DATA on
@@ -684,13 +599,11 @@ int mbedtls_cipher_reset( mbedtls_cipher_context_t *ctx );
 /**
  * \brief               This function adds additional data for AEAD ciphers.
  *                      Currently supported with GCM and ChaCha20+Poly1305.
- *                      This must be called exactly once, after
- *                      mbedtls_cipher_reset().
+ *                      Must be called exactly once, after mbedtls_cipher_reset().
  *
- * \param ctx           The generic cipher context. This must be initialized.
- * \param ad            The additional data to use. This must be a readable
- *                      buffer of at least \p ad_len Bytes.
- * \param ad_len        The length of \p ad in Bytes.
+ * \param ctx           The generic cipher context.
+ * \param ad            The additional data to use.
+ * \param ad_len        the Length of \p ad.
  *
  * \return              \c 0 on success.
  * \return              A specific error code on failure.
@@ -714,17 +627,14 @@ int mbedtls_cipher_update_ad( mbedtls_cipher_context_t *ctx,
  *                      mbedtls_cipher_finish(), must have \p ilen as a
  *                      multiple of the block size of the cipher.
  *
- * \param ctx           The generic cipher context. This must be initialized and
- *                      bound to a key.
- * \param input         The buffer holding the input data. This must be a
- *                      readable buffer of at least \p ilen Bytes.
+ * \param ctx           The generic cipher context.
+ * \param input         The buffer holding the input data.
  * \param ilen          The length of the input data.
- * \param output        The buffer for the output data. This must be able to
- *                      hold at least `ilen + block_size`. This must not be the
- *                      same buffer as \p input.
+ * \param output        The buffer for the output data. Must be able to hold at
+ *                      least \p ilen + block_size. Must not be the same buffer
+ *                      as input.
  * \param olen          The length of the output data, to be updated with the
- *                      actual number of Bytes written. This must not be
- *                      \c NULL.
+ *                      actual number of Bytes written.
  *
  * \return              \c 0 on success.
  * \return              #MBEDTLS_ERR_CIPHER_BAD_INPUT_DATA on
@@ -733,10 +643,8 @@ int mbedtls_cipher_update_ad( mbedtls_cipher_context_t *ctx,
  *                      unsupported mode for a cipher.
  * \return              A cipher-specific error code on failure.
  */
-int mbedtls_cipher_update( mbedtls_cipher_context_t *ctx,
-                           const unsigned char *input,
-                           size_t ilen, unsigned char *output,
-                           size_t *olen );
+int mbedtls_cipher_update( mbedtls_cipher_context_t *ctx, const unsigned char *input,
+                   size_t ilen, unsigned char *output, size_t *olen );
 
 /**
  * \brief               The generic cipher finalization function. If data still
@@ -744,12 +652,9 @@ int mbedtls_cipher_update( mbedtls_cipher_context_t *ctx,
  *                      contained in it is padded to the size of
  *                      the last block, and written to the \p output buffer.
  *
- * \param ctx           The generic cipher context. This must be initialized and
- *                      bound to a key.
- * \param output        The buffer to write data to. This needs to be a writable
- *                      buffer of at least \p block_size Bytes.
+ * \param ctx           The generic cipher context.
+ * \param output        The buffer to write data to. Needs block_size available.
  * \param olen          The length of the data written to the \p output buffer.
- *                      This may not be \c NULL.
  *
  * \return              \c 0 on success.
  * \return              #MBEDTLS_ERR_CIPHER_BAD_INPUT_DATA on
@@ -767,14 +672,10 @@ int mbedtls_cipher_finish( mbedtls_cipher_context_t *ctx,
 /**
  * \brief               This function writes a tag for AEAD ciphers.
  *                      Currently supported with GCM and ChaCha20+Poly1305.
- *                      This must be called after mbedtls_cipher_finish().
+ *                      Must be called after mbedtls_cipher_finish().
  *
- * \param ctx           The generic cipher context. This must be initialized,
- *                      bound to a key, and have just completed a cipher
- *                      operation through mbedtls_cipher_finish() the tag for
- *                      which should be written.
- * \param tag           The buffer to write the tag to. This must be a writable
- *                      buffer of at least \p tag_len Bytes.
+ * \param ctx           The generic cipher context.
+ * \param tag           The buffer to write the tag to.
  * \param tag_len       The length of the tag to write.
  *
  * \return              \c 0 on success.
@@ -786,11 +687,10 @@ int mbedtls_cipher_write_tag( mbedtls_cipher_context_t *ctx,
 /**
  * \brief               This function checks the tag for AEAD ciphers.
  *                      Currently supported with GCM and ChaCha20+Poly1305.
- *                      This must be called after mbedtls_cipher_finish().
+ *                      Must be called after mbedtls_cipher_finish().
  *
- * \param ctx           The generic cipher context. This must be initialized.
- * \param tag           The buffer holding the tag. This must be a readable
- *                      buffer of at least \p tag_len Bytes.
+ * \param ctx           The generic cipher context.
+ * \param tag           The buffer holding the tag.
  * \param tag_len       The length of the tag to check.
  *
  * \return              \c 0 on success.
@@ -804,22 +704,18 @@ int mbedtls_cipher_check_tag( mbedtls_cipher_context_t *ctx,
  * \brief               The generic all-in-one encryption/decryption function,
  *                      for all ciphers except AEAD constructs.
  *
- * \param ctx           The generic cipher context. This must be initialized.
+ * \param ctx           The generic cipher context.
  * \param iv            The IV to use, or NONCE_COUNTER for CTR-mode ciphers.
- *                      This must be a readable buffer of at least \p iv_len
- *                      Bytes.
  * \param iv_len        The IV length for ciphers with variable-size IV.
  *                      This parameter is discarded by ciphers with fixed-size
  *                      IV.
- * \param input         The buffer holding the input data. This must be a
- *                      readable buffer of at least \p ilen Bytes.
- * \param ilen          The length of the input data in Bytes.
- * \param output        The buffer for the output data. This must be able to
- *                      hold at least `ilen + block_size`. This must not be the
- *                      same buffer as \p input.
+ * \param input         The buffer holding the input data.
+ * \param ilen          The length of the input data.
+ * \param output        The buffer for the output data. Must be able to hold at
+ *                      least \p ilen + block_size. Must not be the same buffer
+ *                      as input.
  * \param olen          The length of the output data, to be updated with the
- *                      actual number of Bytes written. This must not be
- *                      \c NULL.
+ *                      actual number of Bytes written.
  *
  * \note                Some ciphers do not use IVs nor nonce. For these
  *                      ciphers, use \p iv = NULL and \p iv_len = 0.
@@ -842,26 +738,19 @@ int mbedtls_cipher_crypt( mbedtls_cipher_context_t *ctx,
 /**
  * \brief               The generic autenticated encryption (AEAD) function.
  *
- * \param ctx           The generic cipher context. This must be initialized and
- *                      bound to a key.
+ * \param ctx           The generic cipher context.
  * \param iv            The IV to use, or NONCE_COUNTER for CTR-mode ciphers.
- *                      This must be a readable buffer of at least \p iv_len
- *                      Bytes.
  * \param iv_len        The IV length for ciphers with variable-size IV.
  *                      This parameter is discarded by ciphers with fixed-size IV.
- * \param ad            The additional data to authenticate. This must be a
- *                      readable buffer of at least \p ad_len Bytes.
+ * \param ad            The additional data to authenticate.
  * \param ad_len        The length of \p ad.
- * \param input         The buffer holding the input data. This must be a
- *                      readable buffer of at least \p ilen Bytes.
+ * \param input         The buffer holding the input data.
  * \param ilen          The length of the input data.
- * \param output        The buffer for the output data. This must be able to
- *                      hold at least \p ilen Bytes.
+ * \param output        The buffer for the output data.
+ *                      Must be able to hold at least \p ilen.
  * \param olen          The length of the output data, to be updated with the
- *                      actual number of Bytes written. This must not be
- *                      \c NULL.
- * \param tag           The buffer for the authentication tag. This must be a
- *                      writable buffer of at least \p tag_len Bytes.
+ *                      actual number of Bytes written.
+ * \param tag           The buffer for the authentication tag.
  * \param tag_len       The desired length of the authentication tag.
  *
  * \return              \c 0 on success.
@@ -883,26 +772,19 @@ int mbedtls_cipher_auth_encrypt( mbedtls_cipher_context_t *ctx,
  *                      is zeroed out to prevent the unauthentic plaintext being
  *                      used, making this interface safer.
  *
- * \param ctx           The generic cipher context. This must be initialized and
- *                      and bound to a key.
+ * \param ctx           The generic cipher context.
  * \param iv            The IV to use, or NONCE_COUNTER for CTR-mode ciphers.
- *                      This must be a readable buffer of at least \p iv_len
- *                      Bytes.
  * \param iv_len        The IV length for ciphers with variable-size IV.
  *                      This parameter is discarded by ciphers with fixed-size IV.
- * \param ad            The additional data to be authenticated. This must be a
- *                      readable buffer of at least \p ad_len Bytes.
+ * \param ad            The additional data to be authenticated.
  * \param ad_len        The length of \p ad.
- * \param input         The buffer holding the input data. This must be a
- *                      readable buffer of at least \p ilen Bytes.
+ * \param input         The buffer holding the input data.
  * \param ilen          The length of the input data.
  * \param output        The buffer for the output data.
- *                      This must be able to hold at least \p ilen Bytes.
+ *                      Must be able to hold at least \p ilen.
  * \param olen          The length of the output data, to be updated with the
- *                      actual number of Bytes written. This must not be
- *                      \c NULL.
- * \param tag           The buffer holding the authentication tag. This must be
- *                      a readable buffer of at least \p tag_len Bytes.
+ *                      actual number of Bytes written.
+ * \param tag           The buffer holding the authentication tag.
  * \param tag_len       The length of the authentication tag.
  *
  * \return              \c 0 on success.

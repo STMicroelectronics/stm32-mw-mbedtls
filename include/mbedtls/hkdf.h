@@ -27,12 +27,6 @@
 #ifndef MBEDTLS_HKDF_H
 #define MBEDTLS_HKDF_H
 
-#if !defined(MBEDTLS_CONFIG_FILE)
-#include "config.h"
-#else
-#include MBEDTLS_CONFIG_FILE
-#endif
-
 #include "md.h"
 
 /**
