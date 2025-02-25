@@ -873,7 +873,7 @@ static int copy_from_psa(mbedtls_svc_key_id_t key_id,
     psa_algorithm_t alg_type;
 #endif /* MBEDTLS_RSA_C */
 #if defined(MBEDTLS_PK_HAVE_ECC_KEYS)
-    size_t key_bits;
+    size_t key_bits = 0U;
 #endif /* MBEDTLS_PK_HAVE_ECC_KEYS */
 
     /* Use a buffer size large enough to contain either a key pair or public key. */

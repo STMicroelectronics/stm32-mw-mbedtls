@@ -20,6 +20,22 @@
   @Note Mbed-TLS release
    For additional information on the Mbed-TLS release, consult the changelog file.
 
+### 04-February-2025 ###
+========================
+    + Replace the Mbed TLS contribution file with the ST contribution file.
+    + Replace the Mbed TLS security file with the ST security file (PSIRT).
+    + Solve warning in pk.c : 'key_bits' may be used uninitialized.
+    + Update st_readme.txt.
+
+### 24-January-2025 ###
+========================
+    + Add CODE_OF_CONDUCT.md
+    + Renamed README.md to MBEDTLS_README.md
+    + Add ST README.md
+    + Add HUK feature to allow cipher operation using the hardware unique key on STM32
+    + Set MBEDTLS_PRIVATE for pk in mbedtls_pk_get_ec_group_id
+    + Update st_readme.txt
+
 ### 25-November-2024 ###
 ========================
     + Move to Mbed-TLS V3.6.2 to get fix for CVE-2024-49195
