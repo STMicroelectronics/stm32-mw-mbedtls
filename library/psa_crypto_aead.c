@@ -580,6 +580,7 @@ psa_status_t mbedtls_psa_aead_finish(
 
         status = mbedtls_to_psa_error(
             mbedtls_ccm_finish(&operation->ctx.ccm,
+                               ciphertext, ciphertext_size, &finish_output_size,
                                tag, operation->tag_length));
     } else
 #endif /* MBEDTLS_PSA_BUILTIN_ALG_CCM */

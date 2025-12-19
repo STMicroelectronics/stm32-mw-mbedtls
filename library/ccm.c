@@ -471,6 +471,7 @@ exit:
 }
 
 int mbedtls_ccm_finish(mbedtls_ccm_context *ctx,
+                       unsigned char *output, size_t output_size, size_t *ciphertext_length,
                        unsigned char *tag, size_t tag_len)
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
@@ -536,7 +537,7 @@ static int ccm_auth_crypt(mbedtls_ccm_context *ctx, int mode, size_t length,
         return ret;
     }
 
-    if ((ret = mbedtls_ccm_finish(ctx, tag, tag_len)) != 0) {
+    if ((ret = mbedtls_ccm_finish(ctx, output, length, &olen, tag, tag_len)) != 0) {
         return ret;
     }
 

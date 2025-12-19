@@ -902,6 +902,7 @@ static int copy_from_psa(mbedtls_svc_key_id_t key_id,
     }
 
 #if defined(MBEDTLS_RSA_C)
+    alg_type = psa_get_key_algorithm(&key_attr);
     if ((key_type == PSA_KEY_TYPE_RSA_KEY_PAIR) ||
         (key_type == PSA_KEY_TYPE_RSA_PUBLIC_KEY)) {
 
@@ -970,6 +971,7 @@ static int copy_from_psa(mbedtls_svc_key_id_t key_id,
     } else
 #endif /* MBEDTLS_PK_HAVE_ECC_KEYS */
     {
+        (void) key_bits;
         return MBEDTLS_ERR_PK_BAD_INPUT_DATA;
     }
 
