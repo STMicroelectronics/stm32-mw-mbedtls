@@ -1,0 +1,160 @@
+{
+    "bomFormat": "CycloneDX",
+    "specVersion": "1.5",
+    "serialNumber": "urn:uuid:5249114e-a500-42a6-a9a8-bf992be7a66d",
+    "version": 1,
+    "metadata": {
+        "timestamp": "2026-02-13T09:07:36Z",
+        "tools": [
+            {
+                "vendor": "Black Duck",
+                "name": "Hub",
+                "version": "2025.10.0"
+            },
+            {
+                "vendor": "CycloneDX",
+                "name": "cyclonedx-core-java",
+                "version": "5.0.5"
+            }
+        ],
+        "authors": [
+            {
+                "name": "STMicroelectronics NV"
+            }
+        ],
+        "component": {
+            "type": "application",
+            "bom-ref": "0b51cdc6-4096-4425-8df0-64a4139bce20",
+            "supplier": {
+                "name": ""
+            },
+            "name": "MbedTLS",
+            "version": "2.0.0",
+            "licenses": [
+                {
+                    "license": {
+                        "id": "Apache-2.0"
+                    }
+                }
+            ],
+            "pedigree": {
+                "notes": "Apache License 2.0"
+            },
+            "properties": [
+                {
+                    "name": "BlackDuck-Component",
+                    "value": "5dc44091-722f-44e0-9706-08f18e02cfb9"
+                },
+                {
+                    "name": "BlackDuck-ComponentVersion",
+                    "value": "0b51cdc6-4096-4425-8df0-64a4139bce20"
+                }
+            ]
+        }
+    },
+    "components": [
+        {
+            "type": "library",
+            "bom-ref": "639df36e-63f3-48be-a7ab-b45e98b826ca",
+            "supplier": {
+                "name": ""
+            },
+            "name": "MbedTLS",
+            "version": "mbed-tls-v3.6.5_20251217",
+            "licenses": [
+                {
+                    "license": {
+                        "id": "Apache-2.0"
+                    }
+                }
+            ],
+            "pedigree": {
+                "notes": "Apache License 2.0"
+            },
+            "properties": [
+                {
+                    "name": "BlackDuck-Component",
+                    "value": "1d5e65db-63bf-4647-bce3-3a239d6c599f"
+                },
+                {
+                    "name": "BlackDuck-ComponentVersion",
+                    "value": "639df36e-63f3-48be-a7ab-b45e98b826ca"
+                }
+            ]
+        },
+        {
+            "type": "library",
+            "bom-ref": "e536d8ef-a2e1-4d12-9bb2-705d1166e06f",
+            "supplier": {
+                "name": ""
+            },
+            "name": "mbed TLS",
+            "version": "v3.6.5",
+            "licenses": [
+                {
+                    "license": {
+                        "id": "Apache-2.0"
+                    }
+                }
+            ],
+            "cpe": "cpe:2.3:a:mbed:mbedtls:3.6.5:*:*:*:*:*:*:*",
+            "pedigree": {
+                "notes": "Apache License 2.0"
+            },
+            "properties": [
+                {
+                    "name": "BlackDuck-Component",
+                    "value": "98e2dba0-77c4-402f-96f3-ceb702a6e6e7"
+                },
+                {
+                    "name": "BlackDuck-ComponentVersion",
+                    "value": "e536d8ef-a2e1-4d12-9bb2-705d1166e06f"
+                }
+            ]
+        },
+        {
+            "type": "library",
+            "bom-ref": "baf38580-1125-401a-b85a-32cce4639732",
+            "supplier": {
+                "name": ""
+            },
+            "name": "mbed TLS_STM32",
+            "version": "3.6.5 / ST modified 20251217",
+            "licenses": [
+                {
+                    "license": {
+                        "id": "Apache-2.0"
+                    }
+                }
+            ],
+            "pedigree": {
+                "notes": "Apache License 2.0"
+            },
+            "properties": [
+                {
+                    "name": "BlackDuck-Component",
+                    "value": "fcdfaf21-8343-45c1-8abe-6dabbcd6f6c8"
+                },
+                {
+                    "name": "BlackDuck-ComponentVersion",
+                    "value": "baf38580-1125-401a-b85a-32cce4639732"
+                }
+            ]
+        }
+    ],
+    "dependencies": [
+        {
+            "ref": "0b51cdc6-4096-4425-8df0-64a4139bce20",
+            "dependsOn": [
+                "639df36e-63f3-48be-a7ab-b45e98b826ca"
+            ]
+        },
+        {
+            "ref": "639df36e-63f3-48be-a7ab-b45e98b826ca",
+            "dependsOn": [
+                "e536d8ef-a2e1-4d12-9bb2-705d1166e06f",
+                "baf38580-1125-401a-b85a-32cce4639732"
+            ]
+        }
+    ]
+}

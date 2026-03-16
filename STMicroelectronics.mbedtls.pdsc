@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:stm32="https://developer.st.com/schemas/stm32cube/1.0.0" schemaVersion="1.7.55" xsi:noNamespaceSchemaLocation="PACK.xsd" xsi:schemaLocation="https://developer.st.com/schemas/stm32cube/1.0.0 stm32cube.xsd" Dvendor="STMicroelectronics:13" Dname="STM32*">
+  <vendor>STMicroelectronics</vendor>
+  <name>mbedtls</name>
+  <environments>
+    <environment name="STM32Cube">
+      <stm32:pack type="MW" friendlyName="mbedtls" shortDesc="MbedTLS middleware for STM32">
+        <relocation-info parent="middleware" layer="" element=""/>
+      </stm32:pack>
+    </environment>
+  </environments>
+  <description overview="README.md">MbedTLS SW Pack</description>
+  <ECCN>
+    <ECCN-EU>NEC</ECCN-EU>
+    <ECCN-US>5D992.c</ECCN-US>
+  </ECCN>
+  <changelogs>
+    <changelog id="Release Notes" default="true" name="ST_Release_Notes.html"/>
+    <changelog id="Changelog" name="ChangeLog"/>
+  </changelogs>
+  <url>https://developer.st.com/st-pack-server/api/v1/pack/</url>
+  <repository type="git">https://github.com/STMicroelectronics/stm32-mw-mbedtls/tree/hal2</repository>
+  <supportContact/>
+  <releases>
+    <release version="2.0.0" date="2025-03-13">
+      First official release of MbedTLS SW Pack based on Mbed TLS 3.6.5
+    </release>
+  </releases>
+  <license>LICENSE.html</license>
+  <taxonomy>
+    <description Cclass="Security" Cgroup="MbedTLS">Mbed TLS</description>
+  </taxonomy>
+  <keywords>
+    <keyword>STMicroelectronics</keyword>
+    <keyword>ST</keyword>
+    <keyword>STM32</keyword>
+    <keyword>Security</keyword>
+    <keyword>PSA</keyword>
+    <keyword>MBED</keyword>
+    <keyword>Cryptography</keyword>
+  </keywords>
+  <apis>
+    <!-- Low level interfaces -->
+    <api Cclass="Security" Cgroup="Persistent Storage API" Capiversion="3.6.5" exclusive="0">
+      <description>Storage API targeting a single implementation of this API </description>
+      <files>
+        <file category="header" name="library/psa_crypto_its.h"/>
+      </files>
+    </api>
+    <api Cclass="Security" Cgroup="ST Crypto Driver API" Capiversion="3.6.5" exclusive="1">
+      <description>Crypto Driver API - multiple Secure Elements implementing this API can work concurrrently</description>
+      <files>
+        <file category="header" name="include/psa/crypto_se_driver.h"/>
+      </files>
+    </api>
+  </apis>
+  <!-- Conditions -->
+  <conditions>
+    <condition id="PSA interface conditions">
+      <description>Ensure PSA APIs are satisfied</description>
+      <accept Cclass="Security" Cgroup="MbedTLS" Csub="MBED API"/>
+      <require Cclass="Security" Cgroup="MbedTLS" Csub="SW Crypto"/>
+      <accept Cclass="Security" Cgroup="MbedTLS" Csub="Persistent Storage"/>
+      <accept Cclass="Security" Cgroup="MbedTLS" Csub="Secure Element"/>
+    </condition>
+    <condition id="MBED interface conditions">
+      <description>Ensure Mbed TLS are satisfied</description>
+      <accept Cclass="Security" Cgroup="MbedTLS" Csub="Core"/>
+      <require Cclass="Security" Cgroup="MbedTLS" Csub="SW Crypto"/>
+    </condition>
+    <condition id="SW Crypto conditions">
+      <description>Ensure Mbed TLS APIs are selected before</description>
+      <require Cclass="Security" Cgroup="MbedTLS" Csub="Core"/>
+    </condition>
+    <condition id="Persistent Storage conditions">
+      <description>Ensure Mbed TLS APIs are selected before</description>
+      <accept Cclass="Security" Cgroup="MbedTLS" Csub="Core"/>
+      <deny Cclass="Security" Cgroup="MbedTLS" Csub="MBED API"/>
+      <accept Cclass="Security" Cgroup="Persistent Storage API"/>
+    </condition>
+    <condition id="ST Secure Element conditions">
+      <description>Ensure Mbed TLS APIs are selected before</description>
+      <accept Cclass="Security" Cgroup="MbedTLS" Csub="Core"/>
+      <accept Cclass="Security" Cgroup="MbedTLS" Csub="Persistent Storage"/>
+      <deny Cclass="Security" Cgroup="MbedTLS" Csub="MBED API"/>
+      <accept Cclass="Security" Cgroup="ST Crypto Driver API"/>
+    </condition>
+  </conditions>
+  <!-- Components definition -->
+  <components>
+    <!-- PSA crypto interface -->
+    <component Cclass="Security" Cgroup="MbedTLS" Csub="PSA API" Cversion="3.6.5" isDefaultVariant="true" condition="PSA interface conditions">
+      <description>PSA crypto interface</description>
+      <files>
+        <file category="include" name="include/psa/"/>
+        <file category="include" name="library/"/>
+        <file category="header" name="include/psa/crypto.h"/>
+        <file category="header" name="include/psa/crypto_adjust_config_dependencies.h"/>
+        <file category="header" name="include/psa/crypto_platform.h"/>
+        <file category="header" name="include/psa/crypto_types.h"/>
+        <file category="header" name="include/psa/crypto_values.h"/>
+        <file category="header" name="library/psa_crypto_driver_wrappers_no_static.h"/>
+        <file category="header" name="library/psa_crypto_slot_management.h"/>
+        <file category="header" name="library/psa_util_internal.h"/>
+        <file category="source" name="library/psa_crypto.c"/>
+        <file category="source" name="library/psa_crypto_aead.c"/>
+        <file category="source" name="library/psa_crypto_cipher.c"/>
+        <file category="source" name="library/psa_crypto_client.c"/>
+        <file category="source" name="library/psa_crypto_driver_wrappers_no_static.c"/>
+        <file category="source" name="library/psa_crypto_ecp.c"/>
+        <file category="source" name="library/psa_crypto_hash.c"/>
+        <file category="source" name="library/psa_crypto_mac.c"/>
+        <file category="source" name="library/psa_crypto_pake.c"/>
+        <file category="source" name="library/psa_crypto_rsa.c"/>
+        <file category="source" name="library/psa_crypto_slot_management.c"/>
+        <file category="source" name="library/psa_its_file.c"/>
+        <file category="source" name="library/psa_util.c"/>
+      </files>
+    </component>
+    <!-- legacy crypto interface inherited from Mbed TLS -->
+    <component Cclass="Security" Cgroup="MbedTLS" Csub="MBED API" Cversion="3.6.5" condition="MBED interface conditions">
+      <description>Legacy crypto interface</description>
+      <files>
+        <file category="include" name="include/mbedtls/"/>
+        <file category="include" name="configs/"/>
+        <file category="header" name="include/mbedtls/check_config.h"/>
+        <file category="header" name="include/mbedtls/aes.h"/>
+        <file category="header" name="include/mbedtls/aria.h"/>
+        <file category="header" name="include/mbedtls/asn1.h"/>
+        <file category="header" name="include/mbedtls/asn1write.h"/>
+        <file category="header" name="include/mbedtls/base64.h"/>
+        <file category="header" name="include/mbedtls/camellia.h"/>
+        <file category="header" name="include/mbedtls/ccm.h"/>
+        <file category="header" name="include/mbedtls/chacha20.h"/>
+        <file category="header" name="include/mbedtls/chachapoly.h"/>
+        <file category="header" name="include/mbedtls/cmac.h"/>
+        <file category="header" name="include/mbedtls/ctr_drbg.h"/>
+        <file category="header" name="include/mbedtls/debug.h"/>
+        <file category="header" name="include/mbedtls/des.h"/>
+        <file category="header" name="include/mbedtls/dhm.h"/>
+        <file category="header" name="include/mbedtls/ecdh.h"/>
+        <file category="header" name="include/mbedtls/ecdsa.h"/>
+        <file category="header" name="include/mbedtls/ecjpake.h"/>
+        <file category="header" name="include/mbedtls/ecp.h"/>
+        <file category="header" name="include/mbedtls/entropy.h"/>
+        <file category="header" name="include/mbedtls/gcm.h"/>
+        <file category="header" name="include/mbedtls/mbedtls_config.h"/>
+        <file category="header" name="include/mbedtls/memory_buffer_alloc.h"/>
+        <file category="header" name="include/mbedtls/rsa.h"/>
+        <file category="header" name="include/mbedtls/sha256.h"/>
+        <file category="header" name="include/mbedtls/version.h"/>
+      </files>
+    </component>
+    <!-- Core -->
+    <component Cclass="Security" Cgroup="MbedTLS" Csub="Core" Cversion="3.6.5">
+      <description>Mbed TLS core implementations</description>
+      <files>
+        <file category="include" name="include/"/>
+        <file category="header" name="library/bignum_core.h"/>
+        <file category="header" name="library/bignum_internal.h"/>
+        <file category="header" name="library/bn_mul.h"/>
+        <file category="header" name="library/constant_time_internal.h"/>
+        <file category="header" name="library/rsa_alt_helpers.h"/>
+        <file category="source" name="library/asn1parse.c"/>
+        <file category="source" name="library/asn1write.c"/>
+        <file category="source" name="library/base64.c"/>
+        <file category="source" name="library/bignum_core.c"/>
+        <file category="source" name="library/bignum.c"/>
+        <file category="source" name="library/cipher_wrap.c"/>
+        <file category="source" name="library/cipher.c"/>
+        <file category="source" name="library/constant_time.c"/>
+        <file category="source" name="library/ctr_drbg.c"/>
+        <file category="source" name="library/debug.c"/>
+        <file category="source" name="library/entropy_poll.c"/>
+        <file category="source" name="library/entropy.c"/>
+        <file category="source" name="library/error.c"/>
+        <file category="source" name="library/hkdf.c"/>
+        <file category="source" name="library/hmac_drbg.c"/>
+        <file category="source" name="library/md.c"/>
+        <file category="source" name="library/memory_buffer_alloc.c"/>
+        <file category="source" name="library/oid.c"/>
+        <file category="source" name="library/pem.c"/>
+        <file category="source" name="library/pk_ecc.c"/>
+        <file category="source" name="library/pk_wrap.c"/>
+        <file category="source" name="library/pk.c"/>
+        <file category="source" name="library/pkcs12.c"/>
+        <file category="source" name="library/pkcs5.c"/>
+        <file category="source" name="library/pkparse.c"/>
+        <file category="source" name="library/pkwrite.c"/>
+        <file category="source" name="library/platform_util.c"/>
+        <file category="source" name="library/platform.c"/>
+        <file category="source" name="library/psa_crypto_ffdh.c"/>
+        <file category="source" name="library/rsa_alt_helpers.c"/>
+        <file category="source" name="library/ssl_cache.c"/>
+        <file category="source" name="library/ssl_ciphersuites.c"/>
+        <file category="source" name="library/ssl_client.c"/>
+        <file category="source" name="library/ssl_cookie.c"/>
+        <file category="source" name="library/ssl_debug_helpers_generated.c"/>
+        <file category="source" name="library/ssl_msg.c"/>
+        <file category="source" name="library/ssl_ticket.c"/>
+        <file category="source" name="library/ssl_tls.c"/>
+        <file category="source" name="library/ssl_tls12_client.c"/>
+        <file category="source" name="library/ssl_tls12_server.c"/>
+        <file category="source" name="library/ssl_tls13_client.c"/>
+        <file category="source" name="library/ssl_tls13_generic.c"/>
+        <file category="source" name="library/ssl_tls13_keys.c"/>
+        <file category="source" name="library/ssl_tls13_server.c"/>
+        <file category="source" name="library/threading.c"/>
+        <file category="source" name="library/timing.c"/>
+        <file category="source" name="library/version_features.c"/>
+        <file category="source" name="library/version.c"/>
+        <file category="source" name="library/x509_create.c"/>
+        <file category="source" name="library/x509_crl.c"/>
+        <file category="source" name="library/x509_crt.c"/>
+        <file category="source" name="library/x509_csr.c"/>
+        <file category="source" name="library/x509.c"/>
+        <file category="source" name="library/x509write_crt.c"/>
+        <file category="source" name="library/x509write_csr.c"/>
+        <file category="source" name="library/x509write.c"/>
+      </files>
+    </component>
+    <!-- Crypto -->
+    <component Cclass="Security" Cgroup="MbedTLS" Csub="SW Crypto" Cversion="3.6.5" condition="SW Crypto conditions">
+      <description>Mbed TLS SW crypto implementations</description>
+      <files>
+        <file category="include" name="include/"/>
+        <file category="source" name="library/aes.c"/>
+        <file category="source" name="library/aria.c"/>
+        <file category="source" name="library/camellia.c"/>
+        <file category="source" name="library/ccm.c"/>
+        <file category="source" name="library/chacha20.c"/>
+        <file category="source" name="library/chachapoly.c"/>
+        <file category="source" name="library/cmac.c"/>
+        <file category="source" name="library/des.c"/>
+        <file category="source" name="library/dhm.c"/>
+        <file category="source" name="library/ecdh.c"/>
+        <file category="source" name="library/ecdsa.c"/>
+        <file category="source" name="library/ecjpake.c"/>
+        <file category="source" name="library/ecp.c"/>
+        <file category="source" name="library/ecp_curves.c"/>
+        <file category="source" name="library/gcm.c"/>
+        <file category="source" name="library/md5.c"/>
+        <file category="source" name="library/nist_kw.c"/>
+        <file category="source" name="library/poly1305.c"/>
+        <file category="source" name="library/ripemd160.c"/>
+        <file category="source" name="library/rsa.c"/>
+        <file category="source" name="library/sha1.c"/>
+        <file category="source" name="library/sha3.c"/>
+        <file category="source" name="library/sha256.c"/>
+        <file category="source" name="library/sha512.c"/>
+      </files>
+    </component>
+    <!-- Storage -->
+    <component Cclass="Security" Cgroup="MbedTLS" Csub="Persistent Storage" Cversion="3.6.5" condition="Persistent Storage conditions">
+      <description>Storage</description>
+      <files>
+        <file category="include" name="include/"/>
+        <file category="header" name="library/psa_crypto_storage.h"/>
+        <file category="source" name="library/psa_crypto_storage.c"/>
+      </files>
+    </component>
+    <!-- Secure Element -->
+    <component Cclass="Security" Cgroup="MbedTLS" Csub="Secure Element" Cversion="3.6.5" condition="ST Secure Element conditions">
+      <description>Secure Element</description>
+      <files>
+        <file category="include" name="include/"/>
+        <file category="header" name="library/psa_crypto_se.h"/>
+        <file category="source" name="library/psa_crypto_se.c"/>
+      </files>
+    </component>
+  </components>
+</package>
