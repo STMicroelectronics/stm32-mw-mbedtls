@@ -9,6 +9,7 @@
  */
 /*
  *  Copyright The Mbed TLS Contributors
+ *  Portions Copyright (C) STMicroelectronics, All Rights Reserved
  *  SPDX-License-Identifier: Apache-2.0
  */
 
@@ -370,6 +371,9 @@
  *
  * Uncomment a macro to enable alternate implementation of the corresponding
  * module.
+ * on STM32, MMBEDTLS_HAL_CCM_MULTIPART_ALT enables the Hardware accerlerated
+ * ccm multipart. This feature can be enable in addition to MBEDTLS_CCM_ALT
+ *  and MBEDTLS_HAL_CCM_ALT
  *
  * \warning   MD5, DES and SHA-1 are considered weak and their
  *            use constitutes a security risk. If possible, we recommend
@@ -396,6 +400,8 @@
 //#define MBEDTLS_SHA1_ALT
 //#define MBEDTLS_SHA256_ALT
 //#define MBEDTLS_SHA512_ALT
+//#define MBEDTLS_HAL_CCM_MULTIPART_ALT
+
 
 /*
  * When replacing the elliptic curve module, please consider, that it is

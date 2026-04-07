@@ -20,6 +20,10 @@
   @Note Mbed-TLS release
    For additional information on the Mbed-TLS release, consult the changelog file.
 
+### 24-February-2026 ###
+========================
+    + Add MBEDTLS_HAL_CCM_MULTIPART_ALT flag to support CCM multipart hardware accelerated,
+      this feature requires MBEDTLS_CCM_ALT and MBEDTLS_HAL_CCM_ALT flags.
 ### 17-December-2025 ###
 ========================
     + Move to Mbed-TLS V3.6.5

@@ -2,6 +2,7 @@
  *  NIST SP800-38C compliant CCM implementation
  *
  *  Copyright The Mbed TLS Contributors
+ *  Portions Copyright (C) STMicroelectronics, All Rights Reserved
  *  SPDX-License-Identifier: Apache-2.0
  */
 
@@ -470,9 +471,7 @@ exit:
     return ret;
 }
 
-int mbedtls_ccm_finish(mbedtls_ccm_context *ctx,
-                       unsigned char *output, size_t output_size, size_t *ciphertext_length,
-                       unsigned char *tag, size_t tag_len)
+int mbedtls_ccm_finish(mbedtls_ccm_context *ctx, unsigned char *tag, size_t tag_len)
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     unsigned char i;
@@ -488,7 +487,6 @@ int mbedtls_ccm_finish(mbedtls_ccm_context *ctx,
     if (ctx->plaintext_len > 0 && ctx->processed != ctx->plaintext_len) {
         return MBEDTLS_ERR_CCM_BAD_INPUT;
     }
-
     /*
      * Authentication: reset counter and crypt/mask internal tag
      */
@@ -511,6 +509,7 @@ int mbedtls_ccm_finish(mbedtls_ccm_context *ctx,
 /*
  * Authenticated encryption or decryption
  */
+
 static int ccm_auth_crypt(mbedtls_ccm_context *ctx, int mode, size_t length,
                           const unsigned char *iv, size_t iv_len,
                           const unsigned char *add, size_t add_len,
@@ -537,8 +536,8 @@ static int ccm_auth_crypt(mbedtls_ccm_context *ctx, int mode, size_t length,
         return ret;
     }
 
-    if ((ret = mbedtls_ccm_finish(ctx, output, length, &olen, tag, tag_len)) != 0) {
-        return ret;
+    if ((ret = mbedtls_ccm_finish(ctx, tag, tag_len)) != 0) {
+         return ret;
     }
 
     return 0;
