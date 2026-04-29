@@ -693,18 +693,18 @@ int mbedtls_ccm_self_test(int verbose)
 
     mbedtls_ccm_init(&ctx);
 
-    if (mbedtls_ccm_setkey(&ctx, MBEDTLS_CIPHER_ID_AES, key_test_data,
-                           8 * sizeof(key_test_data)) != 0) {
-        if (verbose != 0) {
-            mbedtls_printf("  CCM: setup failed");
-        }
-
-        return 1;
-    }
-
     for (i = 0; i < NB_TESTS; i++) {
         if (verbose != 0) {
             mbedtls_printf("  CCM-AES #%u: ", (unsigned int) i + 1);
+        }
+
+        if (mbedtls_ccm_setkey(&ctx, MBEDTLS_CIPHER_ID_AES, key_test_data,
+                               8 * sizeof(key_test_data)) != 0) {
+            if (verbose != 0) {
+                mbedtls_printf("  CCM: setup failed");
+            }
+
+            return 1;
         }
 
         memset(plaintext, 0, CCM_SELFTEST_PT_MAX_LEN);
@@ -728,7 +728,14 @@ int mbedtls_ccm_self_test(int verbose)
             return 1;
         }
         memset(plaintext, 0, CCM_SELFTEST_PT_MAX_LEN);
+        if (mbedtls_ccm_setkey(&ctx, MBEDTLS_CIPHER_ID_AES, key_test_data,
+                               8 * sizeof(key_test_data)) != 0) {
+            if (verbose != 0) {
+                mbedtls_printf("  CCM: setup failed");
+            }
 
+            return 1;
+        }
         ret = mbedtls_ccm_auth_decrypt(&ctx, msg_len_test_data[i],
                                        iv_test_data, iv_len_test_data[i],
                                        ad_test_data, add_len_test_data[i],

@@ -2,6 +2,7 @@
  *  Multi-precision integer library
  *
  *  Copyright The Mbed TLS Contributors
+ *  Portions Copyright (C) STMicroelectronics, All Rights Reserved
  *  SPDX-License-Identifier: Apache-2.0
  */
 
@@ -1759,6 +1760,8 @@ int mbedtls_mpi_gcd_modinv_odd(mbedtls_mpi *G,
     mbedtls_mpi_uint *T = NULL;
     const size_t T_factor = I != NULL ? 5 : 4;
     const mbedtls_mpi_uint zero = 0;
+    mbedtls_mpi_uint *Ip = NULL;
+    const mbedtls_mpi_uint *Ap = NULL;
 
     /* Check requirements on A and N */
     if (mbedtls_mpi_cmp_int(A, 0) < 0 ||
@@ -1792,12 +1795,14 @@ int mbedtls_mpi_gcd_modinv_odd(mbedtls_mpi *G,
         goto cleanup;
     }
 
-    mbedtls_mpi_uint *Ip = I != NULL ? I->p : NULL;
+    Ip = I != NULL ? I->p : NULL;
     /* If A is 0 (null), then A->p would be null, and A->n would be 0,
      * which would be an issue if A->p and A->n were passed to
      * mbedtls_mpi_core_gcd_modinv_odd below. */
-    const mbedtls_mpi_uint *Ap = A->p != NULL ? A->p : &zero;
-    size_t An = A->n >= N->n ? N->n : A->p != NULL ? A->n : 1;
+
+    Ap = A->p != NULL ? A->p : &zero;
+    size_t An;
+    An = A->n >= N->n ? N->n : A->p != NULL ? A->n : 1;
     mbedtls_mpi_core_gcd_modinv_odd(G->p, Ip, Ap, An, N->p, N->n, T);
 
     G->s = 1;
@@ -1826,6 +1831,10 @@ int mbedtls_mpi_gcd(mbedtls_mpi *G, const mbedtls_mpi *A, const mbedtls_mpi *B)
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     mbedtls_mpi TA, TB;
+    size_t za = 0;
+    size_t zb = 0;
+    size_t zg = 0;
+    mbedtls_ct_condition_t swap;
 
     mbedtls_mpi_init(&TA); mbedtls_mpi_init(&TB);
 
@@ -1850,19 +1859,20 @@ int mbedtls_mpi_gcd(mbedtls_mpi *G, const mbedtls_mpi *A, const mbedtls_mpi *B)
     }
 
     /* Make boths inputs odd by putting powers of 2 on the side */
-    const size_t za = mbedtls_mpi_lsb(&TA);
-    const size_t zb = mbedtls_mpi_lsb(&TB);
+    za = mbedtls_mpi_lsb(&TA);
+    zb = mbedtls_mpi_lsb(&TB);
     MBEDTLS_MPI_CHK(mbedtls_mpi_shift_r(&TA, za));
     MBEDTLS_MPI_CHK(mbedtls_mpi_shift_r(&TB, zb));
 
     /* Ensure A <= B: if B < A, swap them */
-    mbedtls_ct_condition_t swap = mbedtls_mpi_core_lt_ct(TB.p, TA.p, TA.n);
+    swap = mbedtls_mpi_core_lt_ct(TB.p, TA.p, TA.n);
     mbedtls_mpi_core_cond_swap(TA.p, TB.p, TA.n, swap);
 
     MBEDTLS_MPI_CHK(mbedtls_mpi_gcd_modinv_odd(G, NULL, &TA, &TB));
 
     /* Re-inject the power of 2 we had previously put aside */
-    size_t zg = za > zb ? zb : za; // zg = min(za, zb)
+
+    zg = za > zb ? zb : za; // zg = min(za, zb)
     MBEDTLS_MPI_CHK(mbedtls_mpi_shift_l(G, zg));
 
 cleanup:
@@ -2008,6 +2018,7 @@ static int mbedtls_mpi_inv_mod_even(mbedtls_mpi *X,
                                     mbedtls_mpi const *N)
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
+    int cmp = -1;
     mbedtls_mpi AA;
 
     mbedtls_mpi_init(&AA);
@@ -2016,7 +2027,7 @@ static int mbedtls_mpi_inv_mod_even(mbedtls_mpi *X,
     MBEDTLS_MPI_CHK(mbedtls_mpi_mod_mpi(&AA, A, N));
 
     /* We know A >= 0 but the next function wants A > 1 */
-    int cmp = mbedtls_mpi_cmp_int(&AA, 1);
+    cmp = mbedtls_mpi_cmp_int(&AA, 1);
     if (cmp < 0) { // AA == 0
         ret = MBEDTLS_ERR_MPI_NOT_ACCEPTABLE;
         goto cleanup;

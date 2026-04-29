@@ -20,6 +20,12 @@
   @Note Mbed-TLS release
    For additional information on the Mbed-TLS release, consult the changelog file.
 
+### 10-April-2026 ###
+========================
+    + Fix IAR Pe546 warnings
+    + Fix pk.c build error, on application PKCS1v1.5
+    + Fix CCM ALT Selftest
+    + Allow data buffering for GCM ALT Selftest
 ### 24-February-2026 ###
 ========================
     + Add MBEDTLS_HAL_CCM_MULTIPART_ALT flag to support CCM multipart hardware accelerated,

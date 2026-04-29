@@ -1,6 +1,6 @@
 # Mbed Crypto library
 
-![tag](https://img.shields.io/badge/tag-mbed_tls_v3.6.5_20260306-brightgreen.svg)
+![tag](https://img.shields.io/badge/tag-mbed_tls_v3.6.5_20260415-brightgreen.svg)
 
 ## Overview
 

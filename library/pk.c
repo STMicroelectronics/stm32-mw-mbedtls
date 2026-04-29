@@ -971,7 +971,9 @@ static int copy_from_psa(mbedtls_svc_key_id_t key_id,
     } else
 #endif /* MBEDTLS_PK_HAVE_ECC_KEYS */
     {
+#if defined(MBEDTLS_PK_HAVE_ECC_KEYS)
         (void) key_bits;
+#endif /* MBEDTLS_PK_HAVE_ECC_KEYS */
         return MBEDTLS_ERR_PK_BAD_INPUT_DATA;
     }
 
