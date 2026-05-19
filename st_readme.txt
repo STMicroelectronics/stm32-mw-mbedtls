@@ -20,6 +20,13 @@
   @Note Mbed-TLS release
    For additional information on the Mbed-TLS release, consult the changelog file.
 
+### 30-April-2026 ###
+========================
+   +Move to Mbed-TLS V3.6.6
+   +Add back ST patches, previously supported
+   +Add condition for mbedtls_psa_drbg_context struct private or not private element, in psa_crypto_random_impl.h
+   +Fix Pe546 warning in pk.c
+   +Update st_readme.txt
 ### 10-April-2026 ###
 ========================
     + Fix IAR Pe546 warnings
