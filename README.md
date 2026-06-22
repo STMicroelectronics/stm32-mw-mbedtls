@@ -3,12 +3,13 @@
 ![tag](https://img.shields.io/badge/tag-2.0.0-brightgreen.svg)
 [![release note](https://img.shields.io/badge/release_note-view_html-gold.svg)](https://htmlpreview.github.io/?https://github.com/STMicroelectronics/stm32-mw-mbedtls/blob/hal2/ST_Release_Notes.html)
 
-README for Mbed TLS
-===================
+Overview
+--------
 
 Mbed TLS is a C library that implements cryptographic primitives (including the [PSA Cryptography API](#psa-cryptography-api)), X.509 certificate manipulation and the SSL/TLS and DTLS protocols. Its small code footprint makes it suitable for embedded systems.
 
 Configuration
+-------------
 
 Mbed TLS should build out of the box on most systems. Some platform specific options are available in the fully documented configuration file `include/mbedtls/mbedtls_config.h`, which is also the place where features can be selected. This file can be edited manually, or in a more programmatic way using the Python 3 script `scripts/config.py` (use `--help` for usage instructions).
 
@@ -17,6 +18,7 @@ Compiler options can be set using conventional environment variables such as `CC
 We provide some non-standard configurations focused on specific use cases in the `configs/` directory. You can read more about those in `configs/README.txt`
 
 Documentation
+-------------
 
 The main Mbed TLS documentation is available via [ReadTheDocs](https://mbed-tls.readthedocs.io/).
 
@@ -31,6 +33,7 @@ To generate a local copy of the library documentation in HTML format, tailored t
 For other sources of documentation, see the [SUPPORT](SUPPORT.md) document.
 
 Compiling
+---------
 
 There are currently three active build systems used within Mbed TLS releases:
 
@@ -238,11 +241,13 @@ The solution file `mbedTLS.sln` contains all the basic projects needed to build 
 In the development branch of Mbed TLS, the Visual Studio solution files need to be generated first as described in ["Generated source files in the development branch"](#generated-source-files-in-the-development-branch).
 
 Example programs
+----------------
 
 We've included example programs for a lot of different features and uses in [`programs/`](programs/README.md).
 Please note that the goal of these sample programs is to demonstrate specific features of the library, and the code may need to be adapted to build a real-world application.
 
 Tests
+-----
 
 Mbed TLS includes an elaborate test suite in `tests/` that initially requires Python to generate the tests files (e.g. `test\_suite\_mpi.c`). These files are generated from a `function file` (e.g. `suites/test\_suite\_mpi.function`) and a `data file` (e.g. `suites/test\_suite\_mpi.data`). The `function file` contains the test functions. The `data file` contains the test cases, specified as parameters that will be passed to the test function.
 
@@ -257,6 +262,7 @@ For machines with a Unix shell and OpenSSL (and optionally GnuTLS) installed, ad
 Instead of manually installing the required versions of all tools required for testing, it is possible to use the Docker images from our CI systems, as explained in [our testing infrastructure repository](https://github.com/Mbed-TLS/mbedtls-test/blob/main/README.md#quick-start).
 
 Porting Mbed TLS
+----------------
 
 Mbed TLS can be ported to many different architectures, OS's and platforms. Before starting a port, you may find the following Knowledge Base articles useful:
 
@@ -275,6 +281,7 @@ Mbed TLS is mostly written in portable C99; however, it has a few platform requi
 - SIZE_MAX must be at least as big as INT_MAX and UINT_MAX.
 
 PSA cryptography API
+--------------------
 
 ### PSA API
 
@@ -310,6 +317,7 @@ When using drivers, you will generally want to enable two compilation options (s
 * `MBEDTLS_PSA_CRYPTO_CONFIG` allows you to enable PSA cryptographic mechanisms without including the code of the corresponding software implementation. This is not yet supported for all mechanisms.
 
 License
+-------
 
 Unless specifically indicated otherwise in a file, Mbed TLS files are provided under [Apache-2.0](https://spdx.org/licenses/Apache-2.0.html) license. See the [LICENSE](LICENSE) file for the full text of these license, and [the 'License and Copyright' section in the contributing guidelines](CONTRIBUTING.md#License-and-Copyright) for more information.
 
@@ -321,10 +329,12 @@ This project contains code from other projects. This code is located within the 
 * `3rdparty/p256-m/p256-m/`: Files have been taken from the [p256-m](https://github.com/mpg/p256-m) repository. The code in the original repository is distributed under the Apache 2.0 license. It is distributed in Mbed TLS under Apache-2.0 license with permission from the author.
 
 Contributing
+------------
 
 We gratefully accept bug reports and contributions from the community. Please see the [contributing guidelines](CONTRIBUTING.md) for details on how to do this.
 
 Contact
+-------
 
 * To report a security vulnerability in Mbed TLS, please email <mbed-tls-security@lists.trustedfirmware.org>. For more information, see [`SECURITY.md`](SECURITY.md).
 * To report a bug or request a feature in Mbed TLS, please [file an issue on GitHub](https://github.com/Mbed-TLS/mbedtls/issues/new/choose).
