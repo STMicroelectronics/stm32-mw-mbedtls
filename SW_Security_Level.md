@@ -9,9 +9,9 @@
 
 [STM32Trust software security policies](https://wiki.st.com/stm32mcu/wiki/Security:STM32Trust_software_security_policies) define four levels of SW Security classification, each level defines a set of security policies for the applicable SW.
 
-| SW                                | SW Security Level
-|:---------                         |:-------|
-| **MbedTLS**                       | Medium|
+| SW                             | SW Security Level
+|:---------                      |:-------|
+| **Mbed TLS**                   | Medium|
 
 
 <BR>

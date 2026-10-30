@@ -178,6 +178,7 @@ static int ccm_calculate_first_block_if_ready(mbedtls_ccm_context *ctx)
             ctx->plaintext_len = 0;
             return 0;
         } else {
+            ctx->state |= CCM_STATE__ERROR;
             return MBEDTLS_ERR_CCM_BAD_INPUT;
         }
     }
@@ -471,9 +472,7 @@ exit:
     return ret;
 }
 
-int mbedtls_ccm_finish(mbedtls_ccm_context *ctx,
-                       unsigned char *output, size_t output_size, size_t *ciphertext_length,
-                       unsigned char *tag, size_t tag_len)
+int mbedtls_ccm_finish(mbedtls_ccm_context *ctx, unsigned char *tag, size_t tag_len)
 {
     int ret = MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     unsigned char i;
@@ -482,11 +481,23 @@ int mbedtls_ccm_finish(mbedtls_ccm_context *ctx,
         return MBEDTLS_ERR_ERROR_CORRUPTION_DETECTED;
     }
 
+    if (!(ctx->state & CCM_STATE__STARTED)) {
+        return MBEDTLS_ERR_CCM_BAD_INPUT;
+    }
+
+    if (!(ctx->state & CCM_STATE__LENGTHS_SET)) {
+        return MBEDTLS_ERR_CCM_BAD_INPUT;
+    }
+
     if (ctx->add_len > 0 && !(ctx->state & CCM_STATE__AUTH_DATA_FINISHED)) {
         return MBEDTLS_ERR_CCM_BAD_INPUT;
     }
 
     if (ctx->plaintext_len > 0 && ctx->processed != ctx->plaintext_len) {
+        return MBEDTLS_ERR_CCM_BAD_INPUT;
+    }
+
+    if (tag_len != ctx->tag_len) {
         return MBEDTLS_ERR_CCM_BAD_INPUT;
     }
 
@@ -512,6 +523,7 @@ int mbedtls_ccm_finish(mbedtls_ccm_context *ctx,
 /*
  * Authenticated encryption or decryption
  */
+
 static int ccm_auth_crypt(mbedtls_ccm_context *ctx, int mode, size_t length,
                           const unsigned char *iv, size_t iv_len,
                           const unsigned char *add, size_t add_len,
@@ -538,8 +550,8 @@ static int ccm_auth_crypt(mbedtls_ccm_context *ctx, int mode, size_t length,
         return ret;
     }
 
-    if ((ret = mbedtls_ccm_finish(ctx, output, length, &olen, tag, tag_len)) != 0) {
-        return ret;
+    if ((ret = mbedtls_ccm_finish(ctx, tag, tag_len)) != 0) {
+         return ret;
     }
 
     return 0;
@@ -695,25 +707,24 @@ int mbedtls_ccm_self_test(int verbose)
 
     mbedtls_ccm_init(&ctx);
 
-
     for (i = 0; i < NB_TESTS; i++) {
         if (verbose != 0) {
             mbedtls_printf("  CCM-AES #%u: ", (unsigned int) i + 1);
+        }
+
+        if (mbedtls_ccm_setkey(&ctx, MBEDTLS_CIPHER_ID_AES, key_test_data,
+                               8 * sizeof(key_test_data)) != 0) {
+            if (verbose != 0) {
+                mbedtls_printf("  CCM: setup failed");
+            }
+
+            return 1;
         }
 
         memset(plaintext, 0, CCM_SELFTEST_PT_MAX_LEN);
         memset(ciphertext, 0, CCM_SELFTEST_CT_MAX_LEN);
         memcpy(plaintext, msg_test_data, msg_len_test_data[i]);
 
-        if (mbedtls_ccm_setkey(&ctx, MBEDTLS_CIPHER_ID_AES, key_test_data, 8 * sizeof(key_test_data)) != 0)
-        {
-          if (verbose != 0)
-          {
-            mbedtls_printf("  CCM: setup failed");
-          }
-
-          return 1;
-        }
         ret = mbedtls_ccm_encrypt_and_tag(&ctx, msg_len_test_data[i],
                                           iv_test_data, iv_len_test_data[i],
                                           ad_test_data, add_len_test_data[i],
@@ -731,15 +742,13 @@ int mbedtls_ccm_self_test(int verbose)
             return 1;
         }
         memset(plaintext, 0, CCM_SELFTEST_PT_MAX_LEN);
+        if (mbedtls_ccm_setkey(&ctx, MBEDTLS_CIPHER_ID_AES, key_test_data,
+                               8 * sizeof(key_test_data)) != 0) {
+            if (verbose != 0) {
+                mbedtls_printf("  CCM: setup failed");
+            }
 
-        if (mbedtls_ccm_setkey(&ctx, MBEDTLS_CIPHER_ID_AES, key_test_data, 8 * sizeof(key_test_data)) != 0)
-        {
-          if (verbose != 0)
-          {
-            mbedtls_printf("  CCM: setup failed");
-          }
-
-          return 1;
+            return 1;
         }
         ret = mbedtls_ccm_auth_decrypt(&ctx, msg_len_test_data[i],
                                        iv_test_data, iv_len_test_data[i],

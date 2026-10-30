@@ -2,7 +2,6 @@
  *  Buffer-based memory allocator
  *
  *  Copyright The Mbed TLS Contributors
- *  Portions Copyright (C) STMicroelectronics, All Rights Reserved
  *  SPDX-License-Identifier: Apache-2.0
  */
 
@@ -581,10 +580,9 @@ void mbedtls_memory_buffer_alloc_init(unsigned char *buf, size_t len)
         buf += MBEDTLS_MEMORY_ALIGN_MULTIPLE
                - (size_t) buf % MBEDTLS_MEMORY_ALIGN_MULTIPLE;
     }
-
 #ifndef MBEDTLS_SRAM_ERASED_ON_RESET
     memset(buf, 0, len);
-#endif /* !MBEDTLS_SRAM_ERASED_ON_RESET */
+#endif /* !MBEDTLS_SRAM_ERASED_ON_RESET */ 
 
     heap.buf = buf;
     heap.len = len;

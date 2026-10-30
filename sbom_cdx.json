@@ -1,15 +1,15 @@
 {
     "bomFormat": "CycloneDX",
     "specVersion": "1.5",
-    "serialNumber": "urn:uuid:5249114e-a500-42a6-a9a8-bf992be7a66d",
+    "serialNumber": "urn:uuid:70ee75de-72d2-4f3a-9fcd-7b55daf6dd40",
     "version": 1,
     "metadata": {
-        "timestamp": "2026-02-13T09:07:36Z",
+        "timestamp": "2026-08-27T12:57:50Z",
         "tools": [
             {
                 "vendor": "Black Duck",
                 "name": "Hub",
-                "version": "2025.10.0"
+                "version": "2026.7.0"
             },
             {
                 "vendor": "CycloneDX",
@@ -24,12 +24,9 @@
         ],
         "component": {
             "type": "application",
-            "bom-ref": "0b51cdc6-4096-4425-8df0-64a4139bce20",
-            "supplier": {
-                "name": ""
-            },
+            "bom-ref": "41c0d9f1-016a-4b37-a089-b9e8f45804c1",
             "name": "MbedTLS",
-            "version": "2.0.0",
+            "version": "2.1.0",
             "licenses": [
                 {
                     "license": {
@@ -47,20 +44,20 @@
                 },
                 {
                     "name": "BlackDuck-ComponentVersion",
-                    "value": "0b51cdc6-4096-4425-8df0-64a4139bce20"
+                    "value": "41c0d9f1-016a-4b37-a089-b9e8f45804c1"
                 }
             ]
+        },
+        "supplier": {
+            "name": "STMicroelectronics NV"
         }
     },
     "components": [
         {
             "type": "library",
-            "bom-ref": "639df36e-63f3-48be-a7ab-b45e98b826ca",
-            "supplier": {
-                "name": ""
-            },
+            "bom-ref": "41c0d9f1-016a-4b37-a089-b9e8f45804c1---c05042ec-535e-48bd-ad3f-523f2240557f",
             "name": "MbedTLS",
-            "version": "mbed-tls-v3.6.5_20251217",
+            "version": "mbed-tls-v3.6.6_20260511",
             "licenses": [
                 {
                     "license": {
@@ -78,18 +75,15 @@
                 },
                 {
                     "name": "BlackDuck-ComponentVersion",
-                    "value": "639df36e-63f3-48be-a7ab-b45e98b826ca"
+                    "value": "c05042ec-535e-48bd-ad3f-523f2240557f"
                 }
             ]
         },
         {
             "type": "library",
-            "bom-ref": "e536d8ef-a2e1-4d12-9bb2-705d1166e06f",
-            "supplier": {
-                "name": ""
-            },
+            "bom-ref": "c05042ec-535e-48bd-ad3f-523f2240557f---871dde9a-cbed-4096-8bcc-07295b309d2d",
             "name": "mbed TLS",
-            "version": "v3.6.5",
+            "version": "3.6.6",
             "licenses": [
                 {
                     "license": {
@@ -97,7 +91,8 @@
                     }
                 }
             ],
-            "cpe": "cpe:2.3:a:mbed:mbedtls:3.6.5:*:*:*:*:*:*:*",
+            "cpe": "cpe:2.3:a:arm:mbed_tls:3.6.6:*:*:*:*:*:*:*",
+            "purl": "pkg:github/mbed-tls/mbedtls@v3.6.6",
             "pedigree": {
                 "notes": "Apache License 2.0"
             },
@@ -108,18 +103,46 @@
                 },
                 {
                     "name": "BlackDuck-ComponentVersion",
-                    "value": "e536d8ef-a2e1-4d12-9bb2-705d1166e06f"
+                    "value": "9fc3169d-de17-4fa5-a11e-6dbd7c9cc87c"
+                },
+                {
+                    "name": "BlackDuck-ComponentOrigin",
+                    "value": "871dde9a-cbed-4096-8bcc-07295b309d2d"
                 }
             ]
         },
         {
             "type": "library",
-            "bom-ref": "baf38580-1125-401a-b85a-32cce4639732",
-            "supplier": {
-                "name": ""
+            "bom-ref": "c05042ec-535e-48bd-ad3f-523f2240557f---9fc3169d-de17-4fa5-a11e-6dbd7c9cc87c",
+            "name": "mbed TLS",
+            "version": "3.6.6",
+            "licenses": [
+                {
+                    "license": {
+                        "id": "Apache-2.0"
+                    }
+                }
+            ],
+            "cpe": "cpe:2.3:a:arm:mbed_tls:3.6.6:*:*:*:*:*:*:*",
+            "pedigree": {
+                "notes": "Apache License 2.0"
             },
+            "properties": [
+                {
+                    "name": "BlackDuck-Component",
+                    "value": "98e2dba0-77c4-402f-96f3-ceb702a6e6e7"
+                },
+                {
+                    "name": "BlackDuck-ComponentVersion",
+                    "value": "9fc3169d-de17-4fa5-a11e-6dbd7c9cc87c"
+                }
+            ]
+        },
+        {
+            "type": "library",
+            "bom-ref": "c05042ec-535e-48bd-ad3f-523f2240557f---d894fca8-adad-4773-86f7-3d31f613e019",
             "name": "mbed TLS_STM32",
-            "version": "3.6.5 / ST modified 20251217",
+            "version": "3.6.6 / ST modified 20260511",
             "licenses": [
                 {
                     "license": {
@@ -137,23 +160,23 @@
                 },
                 {
                     "name": "BlackDuck-ComponentVersion",
-                    "value": "baf38580-1125-401a-b85a-32cce4639732"
+                    "value": "d894fca8-adad-4773-86f7-3d31f613e019"
                 }
             ]
         }
     ],
     "dependencies": [
         {
-            "ref": "0b51cdc6-4096-4425-8df0-64a4139bce20",
+            "ref": "41c0d9f1-016a-4b37-a089-b9e8f45804c1---c05042ec-535e-48bd-ad3f-523f2240557f",
             "dependsOn": [
-                "639df36e-63f3-48be-a7ab-b45e98b826ca"
+                "c05042ec-535e-48bd-ad3f-523f2240557f---9fc3169d-de17-4fa5-a11e-6dbd7c9cc87c",
+                "c05042ec-535e-48bd-ad3f-523f2240557f---d894fca8-adad-4773-86f7-3d31f613e019"
             ]
         },
         {
-            "ref": "639df36e-63f3-48be-a7ab-b45e98b826ca",
+            "ref": "41c0d9f1-016a-4b37-a089-b9e8f45804c1",
             "dependsOn": [
-                "e536d8ef-a2e1-4d12-9bb2-705d1166e06f",
-                "baf38580-1125-401a-b85a-32cce4639732"
+                "41c0d9f1-016a-4b37-a089-b9e8f45804c1---c05042ec-535e-48bd-ad3f-523f2240557f"
             ]
         }
     ]

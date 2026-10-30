@@ -33,11 +33,11 @@
 <div class="col-sm-12 col-lg-8">
 <h1 id="update-history">Update History</h1>
 <div class="collapse">
-<input type="checkbox" id="collapse-section1" checked aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>2.0.0 / 13-March-2026</strong></label>
+<input type="checkbox" id="collapse-section2" checked aria-hidden="true"> <label for="collapse-section2" aria-hidden="true"><strong>2.1.0 / 25-Sep-2026</strong></label>
 <div>
 <h2 id="main-changes">Main Changes</h2>
 <ul>
-<li>First official release of MbedTLS SW Pack based on Mbed TLS 3.6.5.</li>
+<li>First official release of MbedTLS SW Pack based on Mbed TLS 3.6.6.</li>
 </ul>
 <h2 id="contents">Contents</h2>
 <ul>
@@ -56,12 +56,50 @@
 <h2 id="supported-devices-and-boards">Supported devices and boards</h2>
 <ul>
 <li>STM32C5 series.</li>
+<li>STM32G5 series.</li>
+<li>STM32H7P series.</li>
+<li>STM32V8 series.</li>
 </ul>
 <h2 id="backward-compatibility">Backward compatibility</h2>
 <ul>
-<li>None.</li>
+<li>No compatibility break versus previous version.</li>
 </ul>
 <h2 id="dependencies">Dependencies</h2>
+<ul>
+<li>None</li>
+</ul>
+</div>
+</div>
+<div class="collapse">
+<input type="checkbox" id="collapse-section1" aria-hidden="true"> <label for="collapse-section1" aria-hidden="true"><strong>2.0.0 / 13-March-2026</strong></label>
+<div>
+<h2 id="main-changes-1">Main Changes</h2>
+<ul>
+<li>First official release of MbedTLS SW Pack based on Mbed TLS 3.6.5.</li>
+</ul>
+<h2 id="contents-1">Contents</h2>
+<ul>
+<li>Mbed TLS middleware modified by STMicroelectronics.</li>
+</ul>
+<h2 id="known-limitations-1">Known Limitations</h2>
+<ul>
+<li>The MbedTLS is not useful inside STM32CubeMX2 directly, but configurable through the STFCF middleware.</li>
+</ul>
+<h2 id="development-toolchains-and-compilers-1">Development Toolchains and Compilers</h2>
+<ul>
+<li>IAR Embedded Workbench for ARM (EWARM) toolchain V9.60.3 + ST-LINK</li>
+<li>MDK-ARM Keil uVision V5.42</li>
+<li>STM32CubeIDE for Visual Studio Code (GCC13 compiler)</li>
+</ul>
+<h2 id="supported-devices-and-boards-1">Supported devices and boards</h2>
+<ul>
+<li>STM32C5 series.</li>
+</ul>
+<h2 id="backward-compatibility-1">Backward compatibility</h2>
+<ul>
+<li>None.</li>
+</ul>
+<h2 id="dependencies-1">Dependencies</h2>
 <ul>
 <li>STM32C5xx HAL Drivers V2.0.0</li>
 </ul>

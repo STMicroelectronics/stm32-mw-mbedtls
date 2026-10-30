@@ -22,6 +22,9 @@
   <repository type="git">https://github.com/STMicroelectronics/stm32-mw-mbedtls/tree/hal2</repository>
   <supportContact/>
   <releases>
+    <release version="2.1.0" date="2026-09-25">
+      Second official release of MbedTLS SW Pack based on Mbed TLS 3.6.6
+    </release>
     <release version="2.0.0" date="2025-03-13">
       First official release of MbedTLS SW Pack based on Mbed TLS 3.6.5
     </release>
@@ -41,13 +44,13 @@
   </keywords>
   <apis>
     <!-- Low level interfaces -->
-    <api Cclass="Security" Cgroup="Persistent Storage API" Capiversion="3.6.5" exclusive="0">
+    <api Cclass="Security" Cgroup="Persistent Storage API" Capiversion="3.6.6" exclusive="0">
       <description>Storage API targeting a single implementation of this API </description>
       <files>
         <file category="header" name="library/psa_crypto_its.h"/>
       </files>
     </api>
-    <api Cclass="Security" Cgroup="ST Crypto Driver API" Capiversion="3.6.5" exclusive="1">
+    <api Cclass="Security" Cgroup="ST Crypto Driver API" Capiversion="3.6.6" exclusive="1">
       <description>Crypto Driver API - multiple Secure Elements implementing this API can work concurrrently</description>
       <files>
         <file category="header" name="include/psa/crypto_se_driver.h"/>
@@ -89,7 +92,7 @@
   <!-- Components definition -->
   <components>
     <!-- PSA crypto interface -->
-    <component Cclass="Security" Cgroup="MbedTLS" Csub="PSA API" Cversion="3.6.5" isDefaultVariant="true" condition="PSA interface conditions">
+    <component Cclass="Security" Cgroup="MbedTLS" Csub="PSA API" Cversion="3.6.6" isDefaultVariant="true" condition="PSA interface conditions">
       <description>PSA crypto interface</description>
       <files>
         <file category="include" name="include/psa/"/>
@@ -97,6 +100,7 @@
         <file category="header" name="include/psa/crypto.h"/>
         <file category="header" name="include/psa/crypto_adjust_config_dependencies.h"/>
         <file category="header" name="include/psa/crypto_platform.h"/>
+        <file category="header" name="library/psa_crypto_random.h"/>
         <file category="header" name="include/psa/crypto_types.h"/>
         <file category="header" name="include/psa/crypto_values.h"/>
         <file category="header" name="library/psa_crypto_driver_wrappers_no_static.h"/>
@@ -111,6 +115,7 @@
         <file category="source" name="library/psa_crypto_hash.c"/>
         <file category="source" name="library/psa_crypto_mac.c"/>
         <file category="source" name="library/psa_crypto_pake.c"/>
+        <file category="source" name="library/psa_crypto_random.c"/>
         <file category="source" name="library/psa_crypto_rsa.c"/>
         <file category="source" name="library/psa_crypto_slot_management.c"/>
         <file category="source" name="library/psa_its_file.c"/>
@@ -118,7 +123,7 @@
       </files>
     </component>
     <!-- legacy crypto interface inherited from Mbed TLS -->
-    <component Cclass="Security" Cgroup="MbedTLS" Csub="MBED API" Cversion="3.6.5" condition="MBED interface conditions">
+    <component Cclass="Security" Cgroup="MbedTLS" Csub="MBED API" Cversion="3.6.6" condition="MBED interface conditions">
       <description>Legacy crypto interface</description>
       <files>
         <file category="include" name="include/mbedtls/"/>
@@ -152,7 +157,7 @@
       </files>
     </component>
     <!-- Core -->
-    <component Cclass="Security" Cgroup="MbedTLS" Csub="Core" Cversion="3.6.5">
+    <component Cclass="Security" Cgroup="MbedTLS" Csub="Core" Cversion="3.6.6">
       <description>Mbed TLS core implementations</description>
       <files>
         <file category="include" name="include/"/>
@@ -220,7 +225,7 @@
       </files>
     </component>
     <!-- Crypto -->
-    <component Cclass="Security" Cgroup="MbedTLS" Csub="SW Crypto" Cversion="3.6.5" condition="SW Crypto conditions">
+    <component Cclass="Security" Cgroup="MbedTLS" Csub="SW Crypto" Cversion="3.6.6" condition="SW Crypto conditions">
       <description>Mbed TLS SW crypto implementations</description>
       <files>
         <file category="include" name="include/"/>
@@ -251,7 +256,7 @@
       </files>
     </component>
     <!-- Storage -->
-    <component Cclass="Security" Cgroup="MbedTLS" Csub="Persistent Storage" Cversion="3.6.5" condition="Persistent Storage conditions">
+    <component Cclass="Security" Cgroup="MbedTLS" Csub="Persistent Storage" Cversion="3.6.6" condition="Persistent Storage conditions">
       <description>Storage</description>
       <files>
         <file category="include" name="include/"/>
@@ -260,7 +265,7 @@
       </files>
     </component>
     <!-- Secure Element -->
-    <component Cclass="Security" Cgroup="MbedTLS" Csub="Secure Element" Cversion="3.6.5" condition="ST Secure Element conditions">
+    <component Cclass="Security" Cgroup="MbedTLS" Csub="Secure Element" Cversion="3.6.6" condition="ST Secure Element conditions">
       <description>Secure Element</description>
       <files>
         <file category="include" name="include/"/>

@@ -19,6 +19,44 @@ More  documentation is available at [MbedTLS SW Pack online documentation](https
 
 # Update History
 
+<label for="collapse-section2" aria-hidden="true">__2.1.0 / 25-Sep-2026__</label>
+<div>
+
+## Main Changes
+
+- First official release of MbedTLS SW Pack based on Mbed TLS 3.6.6.
+
+## Contents
+
+- Mbed TLS middleware modified by STMicroelectronics.
+
+## Known Limitations
+
+- The MbedTLS is not useful inside STM32CubeMX2 directly, but configurable through the STFCF middleware.
+
+## Development Toolchains and Compilers
+
+- IAR Embedded Workbench for ARM (EWARM) toolchain V9.60.3 + ST-LINK
+- MDK-ARM Keil uVision V5.42
+- STM32CubeIDE for Visual Studio Code (GCC13 compiler)
+
+## Supported devices and boards
+
+- STM32C5 series.
+- STM32G5 series.
+- STM32H7P series.
+- STM32V8 series.
+
+## Backward compatibility
+
+- No compatibility break versus previous version.
+
+## Dependencies
+
+- None
+
+</div>
+
 <label for="collapse-section1" aria-hidden="true">__2.0.0 / 13-March-2026__</label>
 <div>
 
@@ -57,5 +95,5 @@ More  documentation is available at [MbedTLS SW Pack online documentation](https
 
 
 For complete documentation on STM32 Microcontrollers </mark> ,
-visit: http://www.st.com/stm32
+visit: http://www.st.com/stm32)]
 <abbr title="Based on template cx566953 version 2.1">Info</abbr>

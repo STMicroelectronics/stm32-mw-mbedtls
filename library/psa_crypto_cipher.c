@@ -248,14 +248,14 @@ psa_status_t mbedtls_cipher_values_from_psa(
           default:
               ret = PSA_ERROR_NOT_SUPPORTED;
       }
-      
+
       if (ret !=  PSA_ERROR_NOT_SUPPORTED)
-      {    
-        if (cipher_id != NULL) 
+      {
+        if (cipher_id != NULL)
         {
           *cipher_id = cipher_id_tmp;
         }
-        
+
         ret = mbedtls_cipher_validate_values(alg, key_type);
       }
     }

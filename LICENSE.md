@@ -1,4 +1,4 @@
-<!-- License terms for [Apache-2.0]-->
+<!-- License terms for [Apache-2.0] -->
 Apache-2.0
 
 Version 2.0, February 2004
@@ -78,75 +78,50 @@ To apply the Apache License to your work, attach the following boilerplate notic
    See the License for the specific language governing permissions and
    limitations under the License.
 
----
 
 <!-- End of License terms -->
+
 <BR>
 <BR>
 
-<!-- Copyrights statements for [MbedTLS]-->
-Copyrights statements for [MbedTLS]
-
-	Copyright (C) STMicroelectronics, All Rights Reserved
-	
-	Copyright The Mbed TLS Contributors
-	
-<!-- End of Copyrights statements for [MbedTLS]-->
-<!-- Copyrights statements for [mbed TLS]-->
+<!-- Copyrights statements for [mbed TLS] [Apache-2.0] -->
 Copyrights statements for [mbed TLS]
 
-	Copyright (C) 2006-2023, ARM Limited, All Rights Reserved
-	
-	Copyright (c) 2018-2023, Arm Limited. All rights reserved
-	
 	Copyright (c) INRIA and Microsoft Corporation. All rights reserved
-	
+
 	Copyright 2016-2018 INRIA and Microsoft Corporation
-	
+
 	Copyright The Mbed TLS Contributors
-	
+
 	copyright-header.txt -minimal -tmpdir dist/minimal -skip-compilation -extract-uints -add-include <inttypes.h> -add-include <stdbool.h> -add-include "kremlin/internal/compat.h" -add-include "kremlin/in
-	
+
 	copyright-header.txt -minimal -tmpdir dist/uint128 -skip-compilation -extract-uints -add-include <inttypes.h> -add-include <stdbool.h> -add-include "kremlin/internal/types.h" -bundle FStar.UInt128=
-	
+
 	copyright-header.txt -minimal -tmpdir extracted -warn-error
-	
-	mbed TLS v3.6.5 github:mbed-tls/mbedtls:mbedtls-3.6.5: https://www.trustedfirmware.org/
-	
+
 	Copyright (C) 2006-2023, ARM Limited, All Rights Reserved
-	
+
 	Copyright (c) 2018-2023, Arm Limited. All rights reserved
-	
-	Copyright (c) INRIA and Microsoft Corporation. All rights reserved
-	
+
 	Copyright (C) STMicroelectronics, All Rights Reserved
-	
-	Copyright 2016-2018 INRIA and Microsoft Corporation
-	
-	Copyright The Mbed TLS Contributors
-	
-	copyright-header.txt -minimal -tmpdir dist/minimal -skip-compilation -extract-uints -add-include <inttypes.h> -add-include <stdbool.h> -add-include "kremlin/internal/compat.h" -add-include "kremlin/in
-	
-	copyright-header.txt -minimal -tmpdir dist/uint128 -skip-compilation -extract-uints -add-include <inttypes.h> -add-include <stdbool.h> -add-include "kremlin/internal/types.h" -bundle FStar.UInt128=
-	
-	copyright-header.txt -minimal -tmpdir extracted -warn-error
-	
-	mbed TLS v3.6.5 github:mbed-tls/mbedtls:v3.6.5: https://www.trustedfirmware.org/
-	
-	Copyright (C) STMicroelectronics, All Rights Reserved
-	
+
 	copyright = '2023, Mbed TLS Contributors
-	
+
+	copyright assigned to The Mbed TLS Contributors.
+
 	Copyright The Mbed TLS Contributors
-	
-<!-- End of Copyrights statements for [mbed TLS]-->
-<!-- Copyrights statements for [mbed TLS_STM32]-->
+
+	copyright The Mbed TLS Contributors, and are distributed under the license normally
+
+<!-- End of Copyrights statements for [mbed TLS] -->
+
+<!-- Copyrights statements for [mbed TLS_STM32] [Apache-2.0] -->
 Copyrights statements for [mbed TLS_STM32]
 
 	Copyright (C) STMicroelectronics, All Rights Reserved
-	
+
 	Copyright + Update st_readme.txt
-	
+
 	Copyright The Mbed TLS Contributors
-	
-<!-- End of Copyrights statements for [mbed TLS_STM32]-->
+
+<!-- End of Copyrights statements for [mbed TLS_STM32] -->

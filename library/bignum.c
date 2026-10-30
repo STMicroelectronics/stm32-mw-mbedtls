@@ -1799,7 +1799,8 @@ int mbedtls_mpi_gcd_modinv_odd(mbedtls_mpi *G,
     /* If A is 0 (null), then A->p would be null, and A->n would be 0,
      * which would be an issue if A->p and A->n were passed to
      * mbedtls_mpi_core_gcd_modinv_odd below. */
-     Ap = A->p != NULL ? A->p : &zero;
+
+    Ap = A->p != NULL ? A->p : &zero;
     size_t An;
     An = A->n >= N->n ? N->n : A->p != NULL ? A->n : 1;
     mbedtls_mpi_core_gcd_modinv_odd(G->p, Ip, Ap, An, N->p, N->n, T);
@@ -1870,6 +1871,7 @@ int mbedtls_mpi_gcd(mbedtls_mpi *G, const mbedtls_mpi *A, const mbedtls_mpi *B)
     MBEDTLS_MPI_CHK(mbedtls_mpi_gcd_modinv_odd(G, NULL, &TA, &TB));
 
     /* Re-inject the power of 2 we had previously put aside */
+
     zg = za > zb ? zb : za; // zg = min(za, zb)
     MBEDTLS_MPI_CHK(mbedtls_mpi_shift_l(G, zg));
 

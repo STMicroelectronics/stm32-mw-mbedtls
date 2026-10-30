@@ -43,7 +43,7 @@ class CoverageTask(outcome_analysis.CoverageTask):
             'DTLS cookie: enabled, IPv6',
             # Disabled due to OpenSSL bug.
             # https://github.com/openssl/openssl/issues/18887
-            'DTLS fragmenting: 3d, openssl client, DTLS 1.2',
+            'DTLS fragmenting: 3d, MTU=512, openssl client, DTLS 1.2',
             # We don't run ssl-opt.sh with Valgrind on the CI because
             # it's extremely slow. We don't intend to change this.
             'DTLS fragmenting: proxy MTU: auto-reduction (with valgrind)',
@@ -53,6 +53,15 @@ class CoverageTask(outcome_analysis.CoverageTask):
             # https://github.com/Mbed-TLS/mbedtls/issues/9581
             'Opaque key for server authentication: invalid key: decrypt with ECC key, no async',
             'Opaque key for server authentication: invalid key: ecdh with RSA key, no async',
+            # The following test fails intermittently on the CI with a frequency
+            # that significantly impacts CI throughput. They are thus disabled
+            # for the time being. See
+            # https://github.com/Mbed-TLS/mbedtls/issues/10652 for more
+            # information.
+            'DTLS proxy: 3d, openssl client, fragmentation',
+            'DTLS proxy: 3d, openssl client, fragmentation, nbio',
+            'DTLS proxy: 3d, gnutls client, fragmentation',
+            'DTLS proxy: 3d, gnutls client, fragmentation, nbio=2',
         ],
         'test_suite_config.mbedtls_boolean': [
             # We never test with CBC/PKCS5/PKCS12 enabled but
