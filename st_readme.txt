@@ -17,6 +17,9 @@
   ******************************************************************************
   @endverbatim
 
+### 21-October-2026 ###
+   + Deliver SW_Security_Level.md file to state that MW mbedTLS is classified to Security Level Medium.
+	
 ### 10-October-2024 ###
    + Provide a solution to avoid cleaning the mutex used by other tasks :
     - Update alternative AES template : library/templates/aes_alt_template.c
